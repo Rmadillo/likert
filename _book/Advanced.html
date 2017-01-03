@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Do not use averages on Likert scale data</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="This is a short overview of why averages don’t work well for evaluating Likert scale or other ordinal-scale data, and what to do instead, with examples using R.">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Do not use averages on Likert scale data" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a short overview of why averages don’t work well for evaluating Likert scale or other ordinal-scale data, and what to do instead, with examples using R." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Do not use averages on Likert scale data" />
+  
+  <meta name="twitter:description" content="This is a short overview of why averages don’t work well for evaluating Likert scale or other ordinal-scale data, and what to do instead, with examples using R." />
+  
+
+<meta name="author" content="Dwight Barry">
+
+
+<meta name="date" content="2017-01-02">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="is-there-a-significant-difference.html">
+<link rel="next" href="Appendix.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Summary</a></li>
+<li class="chapter" data-level="2" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>2</b> A simple example</a></li>
+<li class="chapter" data-level="3" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>3</b> Visualization</a><ul>
+<li class="chapter" data-level="3.1" data-path="visualization.html"><a href="visualization.html#histograms"><i class="fa fa-check"></i><b>3.1</b> Histograms</a></li>
+<li class="chapter" data-level="3.2" data-path="visualization.html"><a href="visualization.html#likert-charts"><i class="fa fa-check"></i><b>3.2</b> Likert charts</a></li>
+<li class="chapter" data-level="3.3" data-path="visualization.html"><a href="visualization.html#other-ordinal-scale-visualizations"><i class="fa fa-check"></i><b>3.3</b> Other ordinal-scale visualizations</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="visualization.html"><a href="visualization.html#likert-chart-with-response-count-histograms"><i class="fa fa-check"></i><b>3.3.1</b> Likert chart with response count histograms</a></li>
+<li class="chapter" data-level="3.3.2" data-path="visualization.html"><a href="visualization.html#uncentered-likert-chart-for-multiple-questions"><i class="fa fa-check"></i><b>3.3.2</b> Uncentered Likert chart for multiple questions</a></li>
+<li class="chapter" data-level="3.3.3" data-path="visualization.html"><a href="visualization.html#heatmap"><i class="fa fa-check"></i><b>3.3.3</b> Heatmap</a></li>
+<li class="chapter" data-level="3.3.4" data-path="visualization.html"><a href="visualization.html#likert-chart-with-subgroups"><i class="fa fa-check"></i><b>3.3.4</b> Likert chart with subgroups</a></li>
+<li class="chapter" data-level="3.3.5" data-path="visualization.html"><a href="visualization.html#density-histograms"><i class="fa fa-check"></i><b>3.3.5</b> Density histograms</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="tips-and-tricks.html"><a href="tips-and-tricks.html"><i class="fa fa-check"></i><b>4</b> Tips and Tricks</a><ul>
+<li class="chapter" data-level="4.1" data-path="tips-and-tricks.html"><a href="tips-and-tricks.html#neutral-scores-matter"><i class="fa fa-check"></i><b>4.1</b> <em>Neutral</em> scores matter</a></li>
+<li class="chapter" data-level="4.2" data-path="tips-and-tricks.html"><a href="tips-and-tricks.html#how-many-respondents-are-enough"><i class="fa fa-check"></i><b>4.2</b> How many respondents are enough?</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="is-there-a-significant-difference.html"><a href="is-there-a-significant-difference.html"><i class="fa fa-check"></i><b>5</b> Is there a <em>significant</em> difference?</a></li>
+<li class="chapter" data-level="6" data-path="Advanced.html"><a href="Advanced.html"><i class="fa fa-check"></i><b>6</b> Advanced analytics for ordinal scaled variables</a><ul>
+<li class="chapter" data-level="6.1" data-path="Advanced.html"><a href="Advanced.html#chi2-test"><i class="fa fa-check"></i><b>6.1</b> <span class="math inline">\(\chi^2\)</span> test</a></li>
+<li class="chapter" data-level="6.2" data-path="Advanced.html"><a href="Advanced.html#multinomial-regression"><i class="fa fa-check"></i><b>6.2</b> Multinomial regression</a></li>
+<li class="chapter" data-level="6.3" data-path="Advanced.html"><a href="Advanced.html#proportional-odds-regression"><i class="fa fa-check"></i><b>6.3</b> Proportional-odds regression</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="Appendix.html"><a href="Appendix.html"><i class="fa fa-check"></i><b>7</b> Appendix: Measurement Levels &amp; Appropriate Summary Statistics</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Do not use averages on Likert scale data</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="Advanced" class="section level1">
+<h1><span class="header-section-number">Chapter 6</span> Advanced analytics for ordinal scaled variables</h1>
+<div id="chi2-test" class="section level2">
+<h2><span class="header-section-number">6.1</span> <span class="math inline">\(\chi^2\)</span> test</h2>
+<p>While Mann-Whitney-Wilcoxon (sometimes known as the Mann-Whitney <em>U</em>-test) is the test most often used with differences between ordinal distributions, there are other options that can tell you whether a measured difference between groups is statistical different.</p>
+<p>The old stand-by in this case is the <span class="math inline">\(\chi^2\)</span> test, which is often best visualized with a mosaic plot.</p>
+<p><em>Figure 11. Chi-square test and mosaic plot between Employee Type and responses to the “My team works well together” question.</em></p>
+<p><img src="bookdown-demo_files/figure-html/mosaicplot-1.png" width="432" style="display: block; margin: auto;" /></p>
+<pre><code>&gt;  
+&gt;   Pearson&#39;s Chi-squared test with simulated p-value (based on 2000
+&gt;   replicates)
+&gt;  
+&gt;  data:  both2_tab
+&gt;  X-squared = 52.809, df = NA, p-value = 0.0004998</code></pre>
+<p> </p>
+</div>
+<div id="multinomial-regression" class="section level2">
+<h2><span class="header-section-number">6.2</span> Multinomial regression</h2>
+<p>The multinomial regression model is a more powerful (and more modern) version of the <span class="math inline">\(\chi^2\)</span> test.</p>
+<p> </p>
+<p><em>Figure 12. Multinomial regression between Employee Type and responses to the “My team works well together” question, with information-theoretic table for multi-model inference.</em></p>
+<p><img src="bookdown-demo_files/figure-html/multnom_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Modnames</th>
+<th align="right">K</th>
+<th align="right">AICc</th>
+<th align="right">Delta_AICc</th>
+<th align="right">ModelLik</th>
+<th align="right">AICcWt</th>
+<th align="right">LL</th>
+<th align="right">Cum.Wt</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Employee Type</td>
+<td align="right">8</td>
+<td align="right">472.0249</td>
+<td align="right">0.00000</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">-227.5680</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Null Model</td>
+<td align="right">4</td>
+<td align="right">522.0647</td>
+<td align="right">50.03976</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-256.9118</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="proportional-odds-regression" class="section level2">
+<h2><span class="header-section-number">6.3</span> Proportional-odds regression</h2>
+<p>If you can meet the assumptions, the proportional-odds regression is more powerful than the multinomial model, as it can take into account the ordered nature of the ordinal scale.</p>
+<p><em>Figure 13. Proportional odds logistic regression between Employee Type and responses to the “My team works well together” question, with information-theoretic table for multi-model inference.</em></p>
+<p><img src="bookdown-demo_files/figure-html/prop_odds-1.png" width="672" style="display: block; margin: auto;" /></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Modnames</th>
+<th align="right">K</th>
+<th align="right">AICc</th>
+<th align="right">Delta_AICc</th>
+<th align="right">ModelLik</th>
+<th align="right">AICcWt</th>
+<th align="right">LL</th>
+<th align="right">Cum.Wt</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Employee Type</td>
+<td align="right">5</td>
+<td align="right">485.9008</td>
+<td align="right">0.00000</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">-237.7686</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Null Model</td>
+<td align="right">4</td>
+<td align="right">522.0647</td>
+<td align="right">36.16387</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-256.9118</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>If the concepts or ideas in this section are confusing, it’s probably worth consulting a statistician for help evaluating your data with these tools.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="is-there-a-significant-difference.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="Appendix.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/05-summary.Rmd",
+"text": "Edit"
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,244 @@
+# Is there a *significant* difference?  
+ 
+Many decision-makers want to know if a result is "significantly different" from, say, the same response from a previous time period, or between a couple of subgroups in the same response. Unfortunately, this is mostly useless, for two reasons. 
+
+First, acting as if Likert or other ordinal scales are continuous level data leads to many problems of interpretation (see the [*Appendix*](#Appendix) for a summary table of measurement scales and appropriate statistics). There has been controversy over this distinction for many decades; however, a great way to understand the conceptual problem is to realize that the mean of *Agree* and *Strongly Agree* is **not** *Agree-And-A-Half*---it just makes no sense.  
+
+A subsequent argument might be that, no, it's not conceptually accurate, but it provides a sense for directional changes. However, such results still run into problems of interpretation: if you go from 4.17 to 4.33, have you gone from *Agree.17* to *Agree.33*? What does such an "improvement" mean, in practical terms? All you can accurately say is that both values are most consistent with an *Agree* opinion. 
+
+Specifically in the medicine/healthcare context, [Kuzon et al.](https://www.ncbi.nlm.nih.gov/pubmed/8883724) state that the use of parametric statistics on ordinal data (such calculating a mean or using a *t*-test) is the first of "The seven deadly sins of statistical analysis". Don't "sin" and you don't have to worry about whether your results are illegitmate.    
+
+There are a few ways around this: 1) use medians or other quantiles and test for differences in those statistics (these differences are best assessed via bootstrap or permutation testing), 2) test whether the distribution has shifted (Mann-Whitney-Wilcoxon test), or 3) use more advanced techniques such as multinomial or proportional-odds regression (see the [*Advanced*](#Advanced) section, below). These options are the more statistically-correct ways to do it (as opposed a *t*-test).  
+
+However, even if you are using the statistically correct tests, the [multiple-testing problem](https://en.wikipedia.org/wiki/Multiple_comparisons_problem) remains if you are using traditional/frequentist inference. Make sure you [consider the possibility of false-positives](http://xkcd.com/882/) in any interpretation of mass-testing results, or use [other inferential approaches](http://labstats.net/articles/overview.html) such as Bayesian or Information-Theoretic instead (the [*Advanced*](#Advanced) section, below, uses an [AIC-based Information-Theoretic approach](https://en.wikipedia.org/wiki/Akaike_information_criterion) for the model results compared against a no-difference model).  
+
+## Permutation or Mann-Whitney tests
+
+So, using the simple example from Chapter 1, we might want to know whether the median is statistically different between year 1 (Median = `r median(year1)`) and year 2 (Median = `r median(year2)`). Running a [permutation test](https://en.wikipedia.org/wiki/Resampling_(statistics)#Permutation_tests) gives us the following results:   
+  
+
+```{r permtest}
+# Subset to years 1 and 2
+ex_1_long_y12 = dplyr::filter(ex_1_long, variable == "year1" | variable == "year2")
+
+# Permutation test
+coin::oneway_test(value ~ variable, data = ex_1_long_y12, distribution = "exact")
+```
+
+While our effect size is "1"---more accurately, *Agree* to *Strongly Agree*---the *p*-value of the test is very large (basically 1), so we cannot say that this difference is "statistically significant". 
+
+We could also ask, "has the distribution shifted?", which would involve using the [Mann-Whitney-Wilcoxon test](https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test):  
+
+```{r cmon_mann}
+wilcox.test(value ~ variable, data = ex_1_long_y12) 
+```
+
+The *p*-value is non-significant, so the difference between year 1 and year 2 can't be assumed to be a statistically significant change.  
+
+Looking at the raw data or graphs seen earlier, a decision-maker might be justified in wanting to act, but the analysis suggests that the difference is not statistically significant.  
+
+This leads us to the second problem with using *p*-values for determining whether a statistically-significant difference has occurred: sample size.  
+
+*p*-values are directly dependent on sample size. If your sample is large enough, you are guaranteed to have a small *p*-value. If your sample is small, whether or not you get a significant *p*-value depends on the scale of difference between the groups, i.e., the effect size.  
+
+For example, consider the following examples evaluating the number of people who answer *Agree* or *Strongly Agree* (the "favorable" score group) to a question:  
+
+| Example | Favorable | Total Answers | Effect size | *p*-value |
+| ---------- | --------:| --------:|:-------------------:|:---------:|
+| 1 | 15 | 20 | 75% | 0.04 |
+| 2 | 114 | 200 | 57% | 0.04 |
+| 3 | 1,046 | 2,000 | 52% | 0.04 |
+| 4 | 1,001,450 | 2,000,000 | 50% | 0.04 | 
+
+With 15 of 20 people selecting a favorable value on the Likert scale, we have an effect size of 75%, which is certainly an effect worth taking seriously. That value is also a statistically significant difference (*p* < 0.05), which supports the idea that the majority has a favorable opinion. With a couple of thousand responses (example 3), we again have a statistically significant difference, but the effect size is now only 52%, close enough to even-preference as to be *practically* the same. In medical terms, we might think of this as statistically significant but clinically irrelevant.  
+
+For these reasons---[and many others outside the scope of these guidelines](http://www.tandfonline.com/doi/full/10.1080/00031305.2016.1154108)---statisticians are moving away from the use of *p*-values. In frequentist statistics, these are being replaced by the use of effect sizes and confidence intervals (CIs); these provide information on both on the precision of the estimated difference, as well as whether the difference can be considered statistically distinct. If the CI includes 0, the difference is not-significant. Regardless of the location of 0, the width of the CI tells you how precise your estimate is.    
+
+```{r mediantest}
+median_diff = two.boot(year1, year2, median, R=1000)
+cat(paste0("Difference in medians is ", abs(median_diff$t0), "."))
+boot.ci(median_diff, type = "perc") 
+```
+
+Here, we see that the effect size is a difference in medians of 1, but the confidence interval on that effect size goes from -1 to +1, i.e. is consistent with any score difference between *Neutral* and *Strongly Agree*. Since that CI includes 0, we can't say that the change from median of *Agree* to a median of *Strongly Agree* is statistically different, though again, sample size matters---one would probably like to try to intervene based on the one respondent who dropped down to 2 (*Disagree*) anyway. 
+
+## Advanced analytics for ordinal scaled variables {#Advanced}
+
+### $\chi^2$ test
+
+While Mann-Whitney-Wilcoxon (sometimes known as the Mann-Whitney *U*-test) is the test most often used with differences between ordinal distributions, there are other options that can tell you whether a measured difference between groups is statistical different. 
+
+The old stand-by in this case is the $\chi^2$ test, which is often best visualized with a mosaic plot.  
+
+```{r chisq}
+# Get rid of NAs
+both2 = na.omit(both)
+names(both2) = c("EmployeeType", "Teamwork", "Tools")
+both2$Teamwork = ordered(both2$Teamwork, levels = c("5", "4", "3", "2", "1"))
+
+# Make a table object for chisq stuff
+both2_tab = xtabs(~ both2$EmployeeType + both2$Teamwork)
+
+# Resampling version of chi-square
+# coin::chisq_test(both2_tab)
+
+```
+
+*Figure 11. Chi-square test and mosaic plot between Employee Type and responses to the "My team works well together" question.*   
+
+```{r mosaicplot, fig.height=4.25, fig.width=4.5}
+# Mosaic plot with Pearson residuals
+mosaicplot(both2_tab, shade = T, main="", xlab="Employee Type", ylab="My team works well together")
+```
+
+```{r chisq_results}
+# Chi-square
+chisq.test(both2_tab, simulate.p.value = T)
+```
+
+
+```{r loglin}
+# Log-linear model instead of chi-square
+#logln_both = MASS::loglm(both2[,2] ~ both2[,1], both2_tab)
+# logln_both$params
+
+# Poisson glm
+# glm_both = glm(as.numeric(both2[,2]) ~ both2[,1], data=both2, family = poisson)
+# summary(glm_both)
+```
+
+### Multinomial regression
+
+The multinomial regression model is a more powerful (and more modern) version of the $\chi^2$ test.  
+
+*Figure 12. Multinomial regression between Employee Type and responses to the "My team works well together" question, with information-theoretic table for multi-model inference.*  
+
+```{r multnom}
+# Bring axis back to normal
+both2$Teamwork = ordered(both2$Teamwork, levels = c("1", "2", "3", "4", "5"))
+
+# Multinomial regression
+multnom_both = nnet::multinom(Teamwork ~ EmployeeType, data = both2, trace = FALSE)
+multnom_both_1 = nnet::multinom(Teamwork ~ 1, data = both2, trace = FALSE)
+
+# multnom_both
+# exp(coef(multnom_both))
+# exp(confint(multnom_both))
+```
+
+```{r multnom_plot, fig.height=2.5}
+
+# New data for prediction
+df_both = data.frame(EmployeeType = rep(c("MD", "RN"), each = 5),  Teamwork = rep(c(1:5), 2))
+
+# Get probabilities
+multnom_both_probs = cbind(df_both, predict(multnom_both, newdata = df_both, type = "probs", se = TRUE))
+
+# Clean up, ugh
+multnom_both_probs = multnom_both_probs[,-2]
+multnom_both_probs = unique(multnom_both_probs)
+
+# Make data frame for ggplot, probably should figure out tidyr
+multnom_both_probs_df = reshape2::melt(multnom_both_probs, id.vars = "EmployeeType", variable.name = "Teamwork", value.name = "probability")
+
+# Plot multinomial regression probs for Employee Type
+ggplot(multnom_both_probs_df, aes(x = Teamwork, y = probability, color = EmployeeType, group = EmployeeType)) +
+  geom_line() + 
+  geom_point() +
+  xlab("My team works well together")
+```
+
+```{r multnom_model_comps}
+# AICc table
+mod_set = list()
+    mod_set[[1]] = multnom_both
+    mod_set[[2]] = multnom_both_1
+
+kable(aictab(mod_set, modnames = c("Employee Type", "Null Model")))
+```
+
+## Proportional-odds regression
+
+If you can meet the assumptions, the proportional-odds regression is more powerful than the multinomial model, as it can take into account the ordered nature of the ordinal scale.  
+
+*Figure 13. Proportional odds logistic regression between Employee Type and responses to the "My team works well together" question, with information-theoretic table for multi-model inference.*  
+
+```{r prop_odds, fig.height = 2.5}
+# Data frame for proportional odds regression
+Teamwork_tab_long = both2[,1:2] %>%
+  group_by(EmployeeType, Teamwork) %>%
+  summarize(Count = n())
+
+# Proportional odds regression with polr
+polr_both = MASS::polr(Teamwork ~ EmployeeType, data = Teamwork_tab_long, weight = Count)
+#polr_both_1 = MASS::polr(Teamwork ~ 1, data = Teamwork_tab_long, weight = Count)
+#polr_both
+#exp(coef(polr_both))
+#exp(confint(polr_both))
+
+
+
+# New data for prediction, same as multinom
+df_both = data.frame(EmployeeType = rep(c("MD", "RN"), each = 5),  Teamwork = rep(c(1:5), 2))
+
+# Get probabilities
+polr_both_probs = cbind(df_both, predict(polr_both, newdata = df_both, type = "probs", se = TRUE))
+
+# Clean up, ugh
+polr_both_probs = polr_both_probs[,-2]
+polr_both_probs = unique(polr_both_probs)
+
+# Make data frame for ggplot, probably should figure out tidyr
+polr_both_probs_df = reshape2::melt(polr_both_probs, id.vars = "EmployeeType", variable.name = "Teamwork", value.name = "probability")
+
+# Plot prop odds regression probs for Employee Type
+ggplot(polr_both_probs_df, aes(x = Teamwork, y = probability, color = EmployeeType, group = EmployeeType)) +
+  geom_line() + 
+  geom_point() +
+  xlab("My team works well together")
+```
+
+
+```{r polr_model_comps}
+
+countsToCases = function(x, countcol = "Count") {
+    # Get the row indices to pull from x
+    idx = rep.int(seq_len(nrow(x)), x[[countcol]])
+    # Drop count column
+    x[[countcol]] = NULL
+    # Get the rows from x
+    x[idx, ]
+}
+
+# Make a data table
+Teamwork_tab_long$Teamwork_Group = as.numeric(Teamwork_tab_long$Teamwork) 
+Teamwork_tab_long$Teamwork = ordered(Teamwork_tab_long$Teamwork) 
+tab_df = data.frame(countsToCases(Teamwork_tab_long, countcol="Count"))
+
+# Need to better understand diffs between polr and clm
+# Coefs/thresholds are exactly the same, though
+fm1 = ordinal::clm(Teamwork ~ EmployeeType, data=tab_df)
+fm2 = ordinal::clm(Teamwork ~ EmployeeType, data=tab_df, threshold="equidistant")
+
+# Null model
+fm3 = ordinal::clm(Teamwork ~ 1, data=tab_df)
+
+# AICc table
+mod_set = list()
+    mod_set[[1]] = fm1
+    mod_set[[2]] = fm3
+
+kable(aictab(mod_set, modnames = c("Employee Type", "Null Model")))
+
+```
+
+```{r polr_assumptions}
+#The assumption of proportional-odds is ok 
+# Worth showing?
+
+polr_assumptions = anova(fm1, fm2)
+```
+
+If the concepts or ideas in this section are confusing, it's probably worth consulting a statistician for help evaluating your data with these tools.  
+
+

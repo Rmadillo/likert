@@ -1,0 +1,182 @@
+# Advanced analytics for ordinal scaled variables {#Advanced}
+
+## $\chi^2$ test
+
+While Mann-Whitney-Wilcoxon (sometimes known as the Mann-Whitney *U*-test) is the test most often used with differences between ordinal distributions, there are other options that can tell you whether a measured difference between groups is statistical different. 
+
+The old stand-by in this case is the $\chi^2$ test, which is often best visualized with a mosaic plot.  
+
+```{r chisq}
+# Get rid of NAs
+both2 = na.omit(both)
+names(both2) = c("EmployeeType", "Teamwork", "Tools")
+both2$Teamwork = ordered(both2$Teamwork, levels = c("5", "4", "3", "2", "1"))
+
+# Make a table object for chisq stuff
+both2_tab = xtabs(~ both2$EmployeeType + both2$Teamwork)
+
+# Resampling version of chi-square
+# coin::chisq_test(both2_tab)
+
+```
+
+*Figure 11. Chi-square test and mosaic plot between Employee Type and responses to the "My team works well together" question.*   
+
+```{r mosaicplot, fig.height=4.25, fig.width=4.5}
+# Mosaic plot with Pearson residuals
+mosaicplot(both2_tab, shade = T, main="", xlab="Employee Type", ylab="My team works well together")
+```
+
+```{r chisq_results}
+# Chi-square
+chisq.test(both2_tab, simulate.p.value = T)
+```
+
+
+```{r loglin}
+# Log-linear model instead of chi-square
+#logln_both = MASS::loglm(both2[,2] ~ both2[,1], both2_tab)
+# logln_both$params
+
+# Poisson glm
+# glm_both = glm(as.numeric(both2[,2]) ~ both2[,1], data=both2, family = poisson)
+# summary(glm_both)
+```
+
+\ 
+
+## Multinomial regression
+
+The multinomial regression model is a more powerful (and more modern) version of the $\chi^2$ test.  
+
+\  
+
+*Figure 12. Multinomial regression between Employee Type and responses to the "My team works well together" question, with information-theoretic table for multi-model inference.*  
+
+```{r multnom}
+# Bring axis back to normal
+both2$Teamwork = ordered(both2$Teamwork, levels = c("1", "2", "3", "4", "5"))
+
+# Multinomial regression
+multnom_both = nnet::multinom(Teamwork ~ EmployeeType, data = both2, trace = FALSE)
+multnom_both_1 = nnet::multinom(Teamwork ~ 1, data = both2, trace = FALSE)
+
+# multnom_both
+# exp(coef(multnom_both))
+# exp(confint(multnom_both))
+```
+
+```{r multnom_plot, fig.height=2.5}
+
+# New data for prediction
+df_both = data.frame(EmployeeType = rep(c("MD", "RN"), each = 5),  Teamwork = rep(c(1:5), 2))
+
+# Get probabilities
+multnom_both_probs = cbind(df_both, predict(multnom_both, newdata = df_both, type = "probs", se = TRUE))
+
+# Clean up, ugh
+multnom_both_probs = multnom_both_probs[,-2]
+multnom_both_probs = unique(multnom_both_probs)
+
+# Make data frame for ggplot, probably should figure out tidyr
+multnom_both_probs_df = reshape2::melt(multnom_both_probs, id.vars = "EmployeeType", variable.name = "Teamwork", value.name = "probability")
+
+# Plot multinomial regression probs for Employee Type
+ggplot(multnom_both_probs_df, aes(x = Teamwork, y = probability, color = EmployeeType, group = EmployeeType)) +
+  geom_line() + 
+  geom_point() +
+  xlab("My team works well together")
+```
+
+```{r multnom_model_comps}
+# AICc table
+mod_set = list()
+    mod_set[[1]] = multnom_both
+    mod_set[[2]] = multnom_both_1
+
+kable(aictab(mod_set, modnames = c("Employee Type", "Null Model")))
+```
+
+## Proportional-odds regression
+
+If you can meet the assumptions, the proportional-odds regression is more powerful than the multinomial model, as it can take into account the ordered nature of the ordinal scale.  
+
+*Figure 13. Proportional odds logistic regression between Employee Type and responses to the "My team works well together" question, with information-theoretic table for multi-model inference.*  
+
+```{r prop_odds, fig.height = 2.5}
+# Data frame for proportional odds regression
+Teamwork_tab_long = both2[,1:2] %>%
+  group_by(EmployeeType, Teamwork) %>%
+  summarize(Count = n())
+
+# Proportional odds regression with polr
+polr_both = MASS::polr(Teamwork ~ EmployeeType, data = Teamwork_tab_long, weight = Count)
+#polr_both_1 = MASS::polr(Teamwork ~ 1, data = Teamwork_tab_long, weight = Count)
+#polr_both
+#exp(coef(polr_both))
+#exp(confint(polr_both))
+
+
+
+# New data for prediction, same as multinom
+df_both = data.frame(EmployeeType = rep(c("MD", "RN"), each = 5),  Teamwork = rep(c(1:5), 2))
+
+# Get probabilities
+polr_both_probs = cbind(df_both, predict(polr_both, newdata = df_both, type = "probs", se = TRUE))
+
+# Clean up, ugh
+polr_both_probs = polr_both_probs[,-2]
+polr_both_probs = unique(polr_both_probs)
+
+# Make data frame for ggplot, probably should figure out tidyr
+polr_both_probs_df = reshape2::melt(polr_both_probs, id.vars = "EmployeeType", variable.name = "Teamwork", value.name = "probability")
+
+# Plot prop odds regression probs for Employee Type
+ggplot(polr_both_probs_df, aes(x = Teamwork, y = probability, color = EmployeeType, group = EmployeeType)) +
+  geom_line() + 
+  geom_point() +
+  xlab("My team works well together")
+```
+
+
+```{r polr_model_comps}
+
+countsToCases = function(x, countcol = "Count") {
+    # Get the row indices to pull from x
+    idx = rep.int(seq_len(nrow(x)), x[[countcol]])
+    # Drop count column
+    x[[countcol]] = NULL
+    # Get the rows from x
+    x[idx, ]
+}
+
+# Make a data table
+Teamwork_tab_long$Teamwork_Group = as.numeric(Teamwork_tab_long$Teamwork) 
+Teamwork_tab_long$Teamwork = ordered(Teamwork_tab_long$Teamwork) 
+tab_df = data.frame(countsToCases(Teamwork_tab_long, countcol="Count"))
+
+# Need to better understand diffs between polr and clm
+# Coefs/thresholds are exactly the same, though
+fm1 = ordinal::clm(Teamwork ~ EmployeeType, data=tab_df)
+fm2 = ordinal::clm(Teamwork ~ EmployeeType, data=tab_df, threshold="equidistant")
+
+# Null model
+fm3 = ordinal::clm(Teamwork ~ 1, data=tab_df)
+
+# AICc table
+mod_set = list()
+    mod_set[[1]] = fm1
+    mod_set[[2]] = fm3
+
+kable(aictab(mod_set, modnames = c("Employee Type", "Null Model")))
+
+```
+
+```{r polr_assumptions}
+#The assumption of proportional-odds is ok 
+# Worth showing?
+
+polr_assumptions = anova(fm1, fm2)
+```
+
+If the concepts or ideas in this section are confusing, it's probably worth consulting a statistician for help evaluating your data with these tools.  

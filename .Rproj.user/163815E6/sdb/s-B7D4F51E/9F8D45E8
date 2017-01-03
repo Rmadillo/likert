@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "book_filename: \"likert\"\nchapter_name: \"Chapter \"\n",
+    "created" : 1483470225865.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2721017910",
+    "id" : "9F8D45E8",
+    "lastKnownWriteTime" : 1483470237,
+    "last_content_update" : 1483470237194,
+    "path" : "~/Documents/R/bookdown/likert/_bookdown.yml",
+    "project_path" : "_bookdown.yml",
+    "properties" : {
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "yaml"
+}

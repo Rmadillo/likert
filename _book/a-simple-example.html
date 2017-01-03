@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Do not use averages on Likert scale data</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="This is a short overview of why averages don’t work well for evaluating Likert scale or other ordinal-scale data, and what to do instead, with examples using R.">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Do not use averages on Likert scale data" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a short overview of why averages don’t work well for evaluating Likert scale or other ordinal-scale data, and what to do instead, with examples using R." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Do not use averages on Likert scale data" />
+  
+  <meta name="twitter:description" content="This is a short overview of why averages don’t work well for evaluating Likert scale or other ordinal-scale data, and what to do instead, with examples using R." />
+  
+
+<meta name="author" content="Dwight Barry">
+
+
+<meta name="date" content="2017-01-02">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="index.html">
+<link rel="next" href="visualization.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Summary</a></li>
+<li class="chapter" data-level="2" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>2</b> A simple example</a></li>
+<li class="chapter" data-level="3" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>3</b> Visualization</a><ul>
+<li class="chapter" data-level="3.1" data-path="visualization.html"><a href="visualization.html#histograms"><i class="fa fa-check"></i><b>3.1</b> Histograms</a></li>
+<li class="chapter" data-level="3.2" data-path="visualization.html"><a href="visualization.html#likert-charts"><i class="fa fa-check"></i><b>3.2</b> Likert charts</a></li>
+<li class="chapter" data-level="3.3" data-path="visualization.html"><a href="visualization.html#other-ordinal-scale-visualizations"><i class="fa fa-check"></i><b>3.3</b> Other ordinal-scale visualizations</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="visualization.html"><a href="visualization.html#likert-chart-with-response-count-histograms"><i class="fa fa-check"></i><b>3.3.1</b> Likert chart with response count histograms</a></li>
+<li class="chapter" data-level="3.3.2" data-path="visualization.html"><a href="visualization.html#uncentered-likert-chart-for-multiple-questions"><i class="fa fa-check"></i><b>3.3.2</b> Uncentered Likert chart for multiple questions</a></li>
+<li class="chapter" data-level="3.3.3" data-path="visualization.html"><a href="visualization.html#heatmap"><i class="fa fa-check"></i><b>3.3.3</b> Heatmap</a></li>
+<li class="chapter" data-level="3.3.4" data-path="visualization.html"><a href="visualization.html#likert-chart-with-subgroups"><i class="fa fa-check"></i><b>3.3.4</b> Likert chart with subgroups</a></li>
+<li class="chapter" data-level="3.3.5" data-path="visualization.html"><a href="visualization.html#density-histograms"><i class="fa fa-check"></i><b>3.3.5</b> Density histograms</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="tips-and-tricks.html"><a href="tips-and-tricks.html"><i class="fa fa-check"></i><b>4</b> Tips and Tricks</a><ul>
+<li class="chapter" data-level="4.1" data-path="tips-and-tricks.html"><a href="tips-and-tricks.html#neutral-scores-matter"><i class="fa fa-check"></i><b>4.1</b> <em>Neutral</em> scores matter</a></li>
+<li class="chapter" data-level="4.2" data-path="tips-and-tricks.html"><a href="tips-and-tricks.html#how-many-respondents-are-enough"><i class="fa fa-check"></i><b>4.2</b> How many respondents are enough?</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="is-there-a-significant-difference.html"><a href="is-there-a-significant-difference.html"><i class="fa fa-check"></i><b>5</b> Is there a <em>significant</em> difference?</a></li>
+<li class="chapter" data-level="6" data-path="Advanced.html"><a href="Advanced.html"><i class="fa fa-check"></i><b>6</b> Advanced analytics for ordinal scaled variables</a><ul>
+<li class="chapter" data-level="6.1" data-path="Advanced.html"><a href="Advanced.html#chi2-test"><i class="fa fa-check"></i><b>6.1</b> <span class="math inline">\(\chi^2\)</span> test</a></li>
+<li class="chapter" data-level="6.2" data-path="Advanced.html"><a href="Advanced.html#multinomial-regression"><i class="fa fa-check"></i><b>6.2</b> Multinomial regression</a></li>
+<li class="chapter" data-level="6.3" data-path="Advanced.html"><a href="Advanced.html#proportional-odds-regression"><i class="fa fa-check"></i><b>6.3</b> Proportional-odds regression</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="Appendix.html"><a href="Appendix.html"><i class="fa fa-check"></i><b>7</b> Appendix: Measurement Levels &amp; Appropriate Summary Statistics</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Do not use averages on Likert scale data</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="a-simple-example" class="section level1">
+<h1><span class="header-section-number">Chapter 2</span> A simple example</h1>
+<p>Take a simple example where a group of 6 people people take the same survey for 4 years, and the mean results for an important question, such as “my team works well together”, are as follows:</p>
+<p>Taking the mean of these results gives you this:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">Year 1</th>
+<th align="center">Year 2</th>
+<th align="center">Year 3</th>
+<th align="center">Year 4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">4.17</td>
+<td align="center">4.33</td>
+<td align="center">4.33</td>
+<td align="center">4.33</td>
+</tr>
+</tbody>
+</table>
+<p>From these values, one might conclude that there is an improvement from year 1 to year 2, and no change year-over-year after year 2.</p>
+<p>The values that created the above results are as follows:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Individual</th>
+<th align="right">Year 1</th>
+<th align="right">Year 2</th>
+<th align="right">Year 3</th>
+<th align="right">Year 4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">A</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">B</td>
+<td align="right">4</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">C</td>
+<td align="right">4</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">D</td>
+<td align="right">4</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">E</td>
+<td align="right">4</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">F</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">3</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+<p>You might already see how management decisions would be made differently based on whether one had just the means or had the complete data.</p>
+<p>However, in the latter case, you risk reducing or eliminating anonymity, which is essential to get respondents to answer truthfully (not to mention being unethical). Further, poring over tables of answers for many people for long surveys makes that approach practically infeasible. Visualizing the results in ways that capture a more complete story provides an answer to both issues, as well as providing decision-makers with truly actionable information.</p>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="visualization.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/01-intro.Rmd",
+"text": "Edit"
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
