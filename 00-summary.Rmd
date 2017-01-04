@@ -1,0 +1,14 @@
+# Summary
+
+- Likert and similar ordinal-level scales have a variety of uses, particularly within surveys. They also occur in clinical care, for example, in the use of pain scores.  
+ 
+- When evaluated improperly---particularly through the use of averages---the results can be strikingly misleading. Obviously, misleading results could drive or promote action where none is warranted, and vice versa.  
+ 
+- In nearly all cases, not only is it mathematically wrong, **taking the average of a Likert-scale variable will *not* provide useful answers** to the questions end-users can use to make actionable decisions. In essence, the use of averages cannot account for the importance of capturing and understanding variabililty. Analysts should strive to avoid their use in any reporting solution or analytic product that uses ordinal-scale data.  
+ 
+- Better ways to represent ordinal-value results include histograms of the values themselves, the use of well-supported "top-box"-type proportions, and/or bar charts of percentage by score or score category (e.g., favorable/neutral/unfavorable).  
+
+- "Statistical significance" on changes or differences between response groups' medians or distribution shift  can be assessed through non-parametric frequentist tests (e.g., permutation, Mann-Whitney-Wilcoxon), Information Theory, or Bayesian analysis. *t*-tests should never be used on Likert scales because ordinal data does not meet the assumptions of a *t*-test (and when using frequentist tools, one must *also* account for multiple testing to reduce the chance of false positives).  
+ 
+- A good way to remember not to use means on Likert scale data is to think: The average of *Agree* and *Strongly Agree* is **not** *Agree-And-A-Half*.  
+

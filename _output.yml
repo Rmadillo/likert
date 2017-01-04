@@ -9,9 +9,10 @@ bookdown::gitbook:
   css: style.css
   config:
     toc:
+      collapse: section
       before: |
-        <li><a href="./">Do not use averages on Likert scale data</a></li>
+        <li><a href="./">Do not use means with Likert scales</a></li>
       after: |
         <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
     edit:
-      link: https://github.com/Rmadillo/likert
+      link: https://github.com/Rmadillo/likert/edit/master/%s

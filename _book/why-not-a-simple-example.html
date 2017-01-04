@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-
-<link rel="next" href="summary.html">
+<link rel="prev" href="summary.html">
+<link rel="next" href="always-visualize.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -151,91 +151,104 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Do not use averages with Likert scale data</h1>
-<h4 class="author"><em>Dwight Barry</em></h4>
-<h4 class="date"><em>2017-01-03</em></h4>
-</div>
-<div id="about" class="section level1 unnumbered">
-<h1>About</h1>
-<p>This is a short overview of why averages don’t work well for evaluating Likert scale or other ordinal-scale data, and what to do instead, with examples using R. While the examples are focused on healthcare surveys, the lessons apply to any use of ordinal scale data.</p>
-<p><img src="images/likert_cover.jpg" width="408" style="display: block; margin: auto;" /></p>
-<p><em>Note: all of the data in this document is fake, created specifically to illustrate particular points.</em></p>
-<p><em>Cover image</em>: Gustave Doré, 1863. Illustration 12 for Cervantes’s <em>Don Quixote</em>. <a href="https://commons.wikimedia.org/w/index.php?curid=677913">Public Domain</a>.</p>
-<p><img src="images/cc-by-sa.png" width="44" /></p>
-<p><em>This work is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 License</a>.</em></p>
-<div id="data-and-r-packages" class="section level2 unnumbered">
-<h2>Data and R packages</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Packages</span>
-<span class="kw">library</span>(grid)
-<span class="kw">library</span>(nnet)
-<span class="kw">library</span>(coin)
-<span class="kw">library</span>(boot)
-<span class="kw">library</span>(simpleboot)
-<span class="kw">library</span>(knitr)
-<span class="kw">library</span>(ggplot2)
-<span class="kw">library</span>(dplyr)
-<span class="kw">library</span>(AICcmodavg)
-<span class="co">#library(tidyr)</span>
-<span class="kw">library</span>(likert)
- 
-<span class="co"># Data</span>
+<div id="why-not-a-simple-example" class="section level1">
+<h1><span class="header-section-number">Chapter 2</span> <em>Why not?</em> A simple example</h1>
+<p>Take a simple example where a group of 6 people people take the same survey for 4 years, and the mean results for an important question, such as “my team works well together”, are as follows:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Year</th>
+<th align="right">Mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Year 1</td>
+<td align="right">4.17</td>
+</tr>
+<tr class="even">
+<td align="left">Year 2</td>
+<td align="right">4.33</td>
+</tr>
+<tr class="odd">
+<td align="left">Year 3</td>
+<td align="right">4.33</td>
+</tr>
+<tr class="even">
+<td align="left">Year 4</td>
+<td align="right">4.33</td>
+</tr>
+</tbody>
+</table>
+<p>From these values, one might conclude that there is an improvement from year 1 to year 2, and no change year-over-year after year 2.</p>
+<p>The values that created the above results are as follows:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Individual</th>
+<th align="right">Year 1</th>
+<th align="right">Year 2</th>
+<th align="right">Year 3</th>
+<th align="right">Year 4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">A</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">B</td>
+<td align="right">4</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">C</td>
+<td align="right">4</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">D</td>
+<td align="right">4</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">E</td>
+<td align="right">4</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">F</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">3</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+<p>You might already see how management decisions would be made differently based on whether one had just the means or had the complete data.</p>
+<p>However, in the latter case, you risk reducing or eliminating anonymity, which is essential to get respondents to answer truthfully (not to mention being unethical). Further, poring over tables of answers for many people for long surveys makes that approach practically infeasible.</p>
+<p>Visualizing the results in ways that capture a more complete story provides an answer to both issues, as well as providing decision-makers with truly actionable information.</p>
 
-<span class="co"># Basic example data set</span>
-person =<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;A&#39;</span>,<span class="st">&#39;B&#39;</span>,<span class="st">&#39;C&#39;</span>,<span class="st">&#39;D&#39;</span>,<span class="st">&#39;E&#39;</span>,<span class="st">&#39;F&#39;</span>)
-
-<span class="co"># Original </span>
-year1 =<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">4</span>)
-year2 =<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">4</span>)
-year3 =<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">3</span>)
-year4 =<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>)
-
-<span class="co"># A more obvious version</span>
-<span class="co"># year1 = c(3,3,3,3,3,3)</span>
-<span class="co"># year2 = c(4,4,4,2,2,2)</span>
-<span class="co"># year3 = c(5,4,3,3,2,1)</span>
-<span class="co"># year4 = c(5,5,5,1,1,1)</span>
- 
-ex_1 =<span class="st"> </span><span class="kw">data.frame</span>(person, year1, year2, year3, year4)
- 
-ex_1_long =<span class="st"> </span>reshape2::<span class="kw">melt</span>(ex_1)
-
-<span class="co"># Larger example data set</span>
-<span class="kw">set.seed</span>(<span class="dv">29</span>)
-
-md =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Group =</span> <span class="kw">as.character</span>(<span class="st">&quot;MD&quot;</span>), 
-    <span class="dt">Response1 =</span> <span class="kw">ordered</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dv">100</span>, <span class="dt">replace=</span>T, <span class="dt">prob=</span><span class="kw">c</span>(.<span class="dv">1</span>,.<span class="dv">1</span>,.<span class="dv">1</span>,.<span class="dv">2</span>,.<span class="dv">5</span>))), 
-    <span class="dt">Response2 =</span> <span class="kw">ordered</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dv">100</span>, <span class="dt">replace=</span>T, <span class="dt">prob=</span><span class="kw">c</span>(.<span class="dv">1</span>,.<span class="dv">3</span>,.<span class="dv">3</span>,.<span class="dv">25</span>,.<span class="dv">15</span>))))
-rn =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Group =</span> <span class="kw">as.character</span>(<span class="st">&quot;RN&quot;</span>), 
-    <span class="dt">Response1 =</span> <span class="kw">ordered</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dv">100</span>, <span class="dt">replace=</span>T, <span class="dt">prob=</span><span class="kw">c</span>(.<span class="dv">1</span>,.<span class="dv">1</span>,.<span class="dv">5</span>,.<span class="dv">2</span>,.<span class="dv">1</span>))), 
-    <span class="dt">Response2 =</span> <span class="kw">ordered</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dv">100</span>, <span class="dt">replace=</span>T, <span class="dt">prob=</span><span class="kw">c</span>(.<span class="dv">1</span>,.<span class="dv">15</span>,.<span class="dv">45</span>,.<span class="dv">15</span>,.<span class="dv">15</span>))))
- 
-both =<span class="st"> </span><span class="kw">rbind</span>(md, rn)
-
-<span class="co"># Add some NAs </span>
-make_NAs =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">200</span>, <span class="dv">15</span>, <span class="dt">replace=</span>F)
-both$Response1[make_NAs] =<span class="st"> </span><span class="ot">NA</span>
- 
-make_NAs2 =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">200</span>, <span class="dv">15</span>, <span class="dt">replace=</span>F)
-both$Response2[make_NAs2] =<span class="st"> </span><span class="ot">NA</span>
-
-<span class="co"># Add question names to data</span>
-<span class="kw">names</span>(both) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;EmployeeType&quot;</span>, 
-                <span class="st">&quot;My team works well together.&quot;</span>, 
-                <span class="st">&quot;I have the tools I need to do my job.&quot;</span>)
-
-<span class="co"># Save for revision</span>
-<span class="co"># likert_levels = c(&#39;Strongly Disagree&#39;, &#39;Disagree&#39;, &#39;Neither&#39;, &#39;Agree&#39;, &#39;Strongly Agree&#39;)</span></code></pre></div>
-
-</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="summary.html" class="navigation navigation-next navigation-unique" aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="summary.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="always-visualize.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -263,7 +276,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/Rmadillo/likert/edit/master/index.Rmd",
+"link": "https://github.com/Rmadillo/likert/edit/master/01-intro.Rmd",
 "text": "Edit"
 },
 "download": ["likert.pdf", "likert.epub"],

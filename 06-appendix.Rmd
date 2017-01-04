@@ -1,0 +1,25 @@
+# Appendix: Measurement Levels & Summary Statistics {-}
+
+------------------------------------------------------------------------------------------
+Statistic /\               Categorical\   Ranked\     Discrete/Counts\   Continuous\
+Parameter                  *Nominal*      *Ordinal*   *Interval/Ratio*   *Interval/Ratio* 
+------------------------- -------------- ----------- ------------------ ------------------
+Data set size (n)\         Y\              Y\          Y\                  Y\ 
+Percent / Frequency\       Y\              Y\          Y\                  Y\ 
+Count or rate\             Y\              Y\          Y\                  Y\ 
+Categories (levels)\       Y\              Y\          Y\                  Y\ 
+Mode\                      Y\              Y\          Y\                  Y\ 
+Median\                    *No*\              Y\          Y\                  Y\ 
+Interquartile range\       *No*\              Y\          Y\                  Y\ 
+Median absolute deviation\ *No*\              Y\          Y\                  Y\ 
+Range\                     *No*\              Y\          Y\                  Y\ 
+Minimum/maximum value\     *No*\              Y\          Y\                  Y\ 
+Quantiles\                 *No*\              Y\          Y\                  Y\ 
+Mean (average)\            *No*\              *No*\          Y\                 Y\ 
+Standard deviation\        *No*\              *No*\          Y\*\               Y\*\ 
+Coefficient of variation\  *No*\              *No*\          Y\*\               Y\*\ 
+------------------------------------------------------------------------------------------
+
+
+\* You must use the correct distribution (proper mean-variance relationship) to ensure you get the correct standard deviation; most software defaults to calculating the standard deviation for a normally-distributed sample, which could be incorrect for certain kinds of count, rate, or proportion data, for example.  
+

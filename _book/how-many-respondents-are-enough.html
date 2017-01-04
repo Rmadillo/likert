@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-
-<link rel="next" href="summary.html">
+<link rel="prev" href="neutral-scores-matter.html">
+<link rel="next" href="is-there-a-significant-difference.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -151,91 +151,24 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Do not use averages with Likert scale data</h1>
-<h4 class="author"><em>Dwight Barry</em></h4>
-<h4 class="date"><em>2017-01-03</em></h4>
-</div>
-<div id="about" class="section level1 unnumbered">
-<h1>About</h1>
-<p>This is a short overview of why averages don’t work well for evaluating Likert scale or other ordinal-scale data, and what to do instead, with examples using R. While the examples are focused on healthcare surveys, the lessons apply to any use of ordinal scale data.</p>
-<p><img src="images/likert_cover.jpg" width="408" style="display: block; margin: auto;" /></p>
-<p><em>Note: all of the data in this document is fake, created specifically to illustrate particular points.</em></p>
-<p><em>Cover image</em>: Gustave Doré, 1863. Illustration 12 for Cervantes’s <em>Don Quixote</em>. <a href="https://commons.wikimedia.org/w/index.php?curid=677913">Public Domain</a>.</p>
-<p><img src="images/cc-by-sa.png" width="44" /></p>
-<p><em>This work is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 License</a>.</em></p>
-<div id="data-and-r-packages" class="section level2 unnumbered">
-<h2>Data and R packages</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Packages</span>
-<span class="kw">library</span>(grid)
-<span class="kw">library</span>(nnet)
-<span class="kw">library</span>(coin)
-<span class="kw">library</span>(boot)
-<span class="kw">library</span>(simpleboot)
-<span class="kw">library</span>(knitr)
-<span class="kw">library</span>(ggplot2)
-<span class="kw">library</span>(dplyr)
-<span class="kw">library</span>(AICcmodavg)
-<span class="co">#library(tidyr)</span>
-<span class="kw">library</span>(likert)
- 
-<span class="co"># Data</span>
+<div id="how-many-respondents-are-enough" class="section level1">
+<h1><span class="header-section-number">Chapter 5</span> How many respondents are enough?</h1>
+<p>It’s common to think: “We surveyed everyone in this department, therefore the results we see must be correct.” However, how people responded to surveys depends on many factors—such as mood the date the survey is taken, recent events in life and in work, changes in organizational structure, and any number of other factors—and many internal surveys are given only once a year. Thus, survey results are really a <em>sample</em> of attitudes and opinions, subject to random events and natural fluctuations.</p>
+<p>Typical practice at some companies is to expose summary results for groups with six or more people. While this helps preserve some anonymity, it does not include enough responses to ensure the overall response is stable. Comparisons over time or across groups that are not based on stable results can lead to conclusions about differences that may or may not reflect reality.</p>
+<p>In this context, <em>stable</em> means that the data accurately represent true changes (or lack of change) in the question at hand. It’s basically impossible to distinguish natural variation from real change when you have small numbers of respondents. As a result, the National Center for Health Statistics, for example, does not publish results with less than 20 distinct cases or responses.</p>
+<p>The relative standard error (RSE) is the metric used to evaluate whether you have enough values for the results to be stable. The standard error is an estimate of the likely difference between the results and the true value (which in surveys, even of complete populations, can’t be known exactly due to the reasons mentioned above). The <em>relative</em> standard error is the standard error expressed as a percent of the measure or number of responses, which is a constant function: <span class="math inline">\(\frac{1}{\sqrt{responses}} * 100\)</span>. This function can be seen in the graph on the next page.</p>
+<p>Generally, you want RSE values less than 20-25% to have some confidence that your results are stable.</p>
+<p><em>The RSE-response count function. The RSE associated with the use of 6 responses is marked with dark red, and the response count associated with an RSE of 25% is marked with dark blue.</em></p>
+<p><img src="likert_files/figure-html/rse-1.png" width="768" style="display: block; margin: auto;" /></p>
 
-<span class="co"># Basic example data set</span>
-person =<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;A&#39;</span>,<span class="st">&#39;B&#39;</span>,<span class="st">&#39;C&#39;</span>,<span class="st">&#39;D&#39;</span>,<span class="st">&#39;E&#39;</span>,<span class="st">&#39;F&#39;</span>)
-
-<span class="co"># Original </span>
-year1 =<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">4</span>)
-year2 =<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">4</span>)
-year3 =<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">3</span>)
-year4 =<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>)
-
-<span class="co"># A more obvious version</span>
-<span class="co"># year1 = c(3,3,3,3,3,3)</span>
-<span class="co"># year2 = c(4,4,4,2,2,2)</span>
-<span class="co"># year3 = c(5,4,3,3,2,1)</span>
-<span class="co"># year4 = c(5,5,5,1,1,1)</span>
- 
-ex_1 =<span class="st"> </span><span class="kw">data.frame</span>(person, year1, year2, year3, year4)
- 
-ex_1_long =<span class="st"> </span>reshape2::<span class="kw">melt</span>(ex_1)
-
-<span class="co"># Larger example data set</span>
-<span class="kw">set.seed</span>(<span class="dv">29</span>)
-
-md =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Group =</span> <span class="kw">as.character</span>(<span class="st">&quot;MD&quot;</span>), 
-    <span class="dt">Response1 =</span> <span class="kw">ordered</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dv">100</span>, <span class="dt">replace=</span>T, <span class="dt">prob=</span><span class="kw">c</span>(.<span class="dv">1</span>,.<span class="dv">1</span>,.<span class="dv">1</span>,.<span class="dv">2</span>,.<span class="dv">5</span>))), 
-    <span class="dt">Response2 =</span> <span class="kw">ordered</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dv">100</span>, <span class="dt">replace=</span>T, <span class="dt">prob=</span><span class="kw">c</span>(.<span class="dv">1</span>,.<span class="dv">3</span>,.<span class="dv">3</span>,.<span class="dv">25</span>,.<span class="dv">15</span>))))
-rn =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Group =</span> <span class="kw">as.character</span>(<span class="st">&quot;RN&quot;</span>), 
-    <span class="dt">Response1 =</span> <span class="kw">ordered</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dv">100</span>, <span class="dt">replace=</span>T, <span class="dt">prob=</span><span class="kw">c</span>(.<span class="dv">1</span>,.<span class="dv">1</span>,.<span class="dv">5</span>,.<span class="dv">2</span>,.<span class="dv">1</span>))), 
-    <span class="dt">Response2 =</span> <span class="kw">ordered</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dv">100</span>, <span class="dt">replace=</span>T, <span class="dt">prob=</span><span class="kw">c</span>(.<span class="dv">1</span>,.<span class="dv">15</span>,.<span class="dv">45</span>,.<span class="dv">15</span>,.<span class="dv">15</span>))))
- 
-both =<span class="st"> </span><span class="kw">rbind</span>(md, rn)
-
-<span class="co"># Add some NAs </span>
-make_NAs =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">200</span>, <span class="dv">15</span>, <span class="dt">replace=</span>F)
-both$Response1[make_NAs] =<span class="st"> </span><span class="ot">NA</span>
- 
-make_NAs2 =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">200</span>, <span class="dv">15</span>, <span class="dt">replace=</span>F)
-both$Response2[make_NAs2] =<span class="st"> </span><span class="ot">NA</span>
-
-<span class="co"># Add question names to data</span>
-<span class="kw">names</span>(both) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;EmployeeType&quot;</span>, 
-                <span class="st">&quot;My team works well together.&quot;</span>, 
-                <span class="st">&quot;I have the tools I need to do my job.&quot;</span>)
-
-<span class="co"># Save for revision</span>
-<span class="co"># likert_levels = c(&#39;Strongly Disagree&#39;, &#39;Disagree&#39;, &#39;Neither&#39;, &#39;Agree&#39;, &#39;Strongly Agree&#39;)</span></code></pre></div>
-
-</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="summary.html" class="navigation navigation-next navigation-unique" aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="neutral-scores-matter.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="is-there-a-significant-difference.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -263,7 +196,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/Rmadillo/likert/edit/master/index.Rmd",
+"link": "https://github.com/Rmadillo/likert/edit/master/04-stablity.Rmd",
 "text": "Edit"
 },
 "download": ["likert.pdf", "likert.epub"],

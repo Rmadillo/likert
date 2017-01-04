@@ -1,21 +1,25 @@
-# A simple example 
- 
+# *Why not?* A simple example 
+
 Take a simple example where a group of 6 people people take the same survey for 4 years, and the mean results for an important question, such as "my team works well together", are as follows: 
  
-Taking the mean of these results gives you this:
- 
-| Year 1 | Year 2 | Year 3 | Year 4 | 
-|:------:|:------:|:------:|:------:|
-| `r round(mean(year1), 2)` | `r round(mean(year2), 2)` | `r round(mean(year3), 2)` | `r round(mean(year4), 2)` |
+```{r ex_1_table_means, echo=FALSE}
+kable(
+  data.frame(Year = c("Year 1", "Year 2", "Year 3", "Year 4"),
+             Mean = c(round(mean(year1), 2), round(mean(year2), 2), round(mean(year3), 2), round(mean(year4), 2))
+             )
+)
+```
  
 From these values, one might conclude that there is an improvement from year 1 to year 2, and no change year-over-year after year 2. 
  
 The values that created the above results are as follows:  
  
-```{r ex_1_table}
+```{r ex_1_table_data, echo=FALSE}
 kable(ex_1, col.names = c("Individual", "Year 1", "Year 2", "Year 3", "Year 4"))
 ```
  
 You might already see how management decisions would be made differently based on whether one had just the means or had the complete data. 
  
-However, in the latter case, you risk reducing or eliminating anonymity, which is essential to get respondents to answer truthfully (not to mention being unethical). Further, poring over tables of answers for many people for long surveys makes that approach practically infeasible. Visualizing the results in ways that capture a more complete story provides an answer to both issues, as well as providing decision-makers with truly actionable information.
+However, in the latter case, you risk reducing or eliminating anonymity, which is essential to get respondents to answer truthfully (not to mention being unethical). Further, poring over tables of answers for many people for long surveys makes that approach practically infeasible. 
+
+Visualizing the results in ways that capture a more complete story provides an answer to both issues, as well as providing decision-makers with truly actionable information.

@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "bookdown::pdf_book:\n  includes:\n    in_header: preamble.tex\n  latex_engine: xelatex\n  citation_package: natbib\n  keep_tex: yes\nbookdown::epub_book: default\nbookdown::gitbook:\n  css: style.css\n  config:\n    toc:\n      collapse: section\n      before: |\n        <li><a href=\"./\">Do not use means with Likert scales</a></li>\n      after: |\n        <li><a href=\"https://github.com/rstudio/bookdown\" target=\"blank\">Published with bookdown</a></li>\n    edit:\n      link: https://github.com/Rmadillo/likert/edit/master/%s\n",
+    "created" : 1483489943009.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1705708471",
+    "id" : "B5C9D2D",
+    "lastKnownWriteTime" : 1483489955,
+    "last_content_update" : 1483489955123,
+    "path" : "~/Documents/R/bookdown/likert/_output.yml",
+    "project_path" : "_output.yml",
+    "properties" : {
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "yaml"
+}

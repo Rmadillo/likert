@@ -1,36 +1,46 @@
 --- 
-title: "Do not use averages on Likert scale data"
+title: "Do not use averages with Likert scale data"
 author: "Dwight Barry"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book
-github-repo: 
+github-repo: Rmadillo/likert
+cover-image: images/likert_cover.jpg
 description: "This is a short overview of why averages don't work well for evaluating Likert scale or other ordinal-scale data, and what to do instead, with examples using R."
 ---
 
-# Summary
+# About {-}
 
-- Likert and similar ordinal-level scales have a variety of uses, particularly within surveys. They also occur in clinical care, for example, in the use of pain scores.  
- 
-- When evaluated improperly---particularly through the use of averages---the results can be strikingly misleading. Obviously, misleading results could drive or promote action where none is warranted, and vice versa.  
- 
-- In nearly all cases, not only is it mathematically wrong, **taking the average of a Likert-scale variable will *not* provide useful answers** to the questions end-users can use to make actionable decisions. In essence, the use of averages cannot account for the importance of capturing and understanding variabililty. Analysts should strive to avoid their use in any reporting solution or analytic product that uses ordinal-scale data.  
- 
-- Better ways to represent ordinal-value results include histograms of the values themselves, the use of well-supported "top-box"-type proportions, and/or bar charts of percentage by score or score category (e.g., favorable/neutral/unfavorable).  
+This is a short overview of why averages don't work well for evaluating Likert scale or other ordinal-scale data, and what to do instead, with examples using R. While the examples are focused on healthcare surveys, the lessons apply to any use of ordinal scale data.    
 
-- "Statistical significance" on changes or differences between response groups' medians or distribution shift  can be assessed through non-parametric frequentist tests (e.g., permutation, Mann-Whitney-Wilcoxon), Information Theory, or Bayesian analysis. *t*-tests should never be used on Likert scales because ordinal data does not meet the assumptions of a *t*-test (and when using frequentist tools, one must *also* account for multiple testing to reduce the chance of false positives).  
- 
-- A good way to remember not to use means on Likert scale data is to think: The average of *Agree* and *Strongly Agree* is **not** *Agree-And-A-Half*.  
+```{r cover, fig.align='center', echo=FALSE}
+knitr::include_graphics('images/likert_cover.jpg')
+```
 
 *Note: all of the data in this document is fake, created specifically to illustrate particular points.*  
 
- 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, comment = "> ", fig.height = 3, fig.align = "center")
 
+*Cover image*: Gustave Doré, 1863. Illustration 12 for Cervantes's *Don Quixote*. [Public Domain]( https://commons.wikimedia.org/w/index.php?curid=677913).  
+
+
+
+```{r ccbysa, echo=FALSE}
+knitr::include_graphics('images/cc-by-sa.png')
+```
+
+*This work is licensed under a [Creative Commons Attribution-ShareAlike 4.0 License](https://creativecommons.org/licenses/by-sa/4.0/).*  
+
+## Data and R packages {-}
+
+```{r setup_hidden, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, comment = "> ", fig.height = 3, fig.align = "center")
+```
+
+```{r setup}
 # Packages
 library(grid)
+library(nnet)
 library(coin)
 library(boot)
 library(simpleboot)
@@ -64,20 +74,28 @@ ex_1_long = reshape2::melt(ex_1)
 
 # Larger example data set
 set.seed(29)
-md = data.frame(Group = as.character("MD"), Response1 = ordered(sample(1:5, 100, replace=T, prob=c(.1,.1,.1,.2,.5))), Response2 = ordered(sample(1:5, 100, replace=T, prob=c(.1,.3,.3,.25,.15))))
-rn = data.frame(Group = as.character("RN"), Response1 = ordered(sample(1:5, 100, replace=T, prob=c(.1,.1,.5,.2,.1))), Response2 = ordered(sample(1:5, 100, replace=T, prob=c(.1,.15,.45,.15,.15))))
+
+md = data.frame(Group = as.character("MD"), 
+    Response1 = ordered(sample(1:5, 100, replace=T, prob=c(.1,.1,.1,.2,.5))), 
+    Response2 = ordered(sample(1:5, 100, replace=T, prob=c(.1,.3,.3,.25,.15))))
+rn = data.frame(Group = as.character("RN"), 
+    Response1 = ordered(sample(1:5, 100, replace=T, prob=c(.1,.1,.5,.2,.1))), 
+    Response2 = ordered(sample(1:5, 100, replace=T, prob=c(.1,.15,.45,.15,.15))))
  
 both = rbind(md, rn)
- 
+
+# Add some NAs 
 make_NAs = sample(1:200, 15, replace=F)
 both$Response1[make_NAs] = NA
  
 make_NAs2 = sample(1:200, 15, replace=F)
 both$Response2[make_NAs2] = NA
- 
-names(both) = c("EmployeeType", "My team works well together.", "I have the tools I need to do my job.")
+
+# Add question names to data
+names(both) = c("EmployeeType", 
+                "My team works well together.", 
+                "I have the tools I need to do my job.")
 
 # Save for revision
 # likert_levels = c('Strongly Disagree', 'Disagree', 'Neither', 'Agree', 'Strongly Agree')
 ```
- 

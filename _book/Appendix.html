@@ -5,35 +5,35 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Do not use averages on Likert scale data</title>
+  <title>Do not use averages with Likert scale data</title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
   <meta name="description" content="This is a short overview of why averages don’t work well for evaluating Likert scale or other ordinal-scale data, and what to do instead, with examples using R.">
   <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
-  <meta property="og:title" content="Do not use averages on Likert scale data" />
+  <meta property="og:title" content="Do not use averages with Likert scale data" />
   <meta property="og:type" content="book" />
   
-  
+  <meta property="og:image" content="images/likert_cover.jpg" />
   <meta property="og:description" content="This is a short overview of why averages don’t work well for evaluating Likert scale or other ordinal-scale data, and what to do instead, with examples using R." />
-  
+  <meta name="github-repo" content="Rmadillo/likert" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Do not use averages on Likert scale data" />
+  <meta name="twitter:title" content="Do not use averages with Likert scale data" />
   
   <meta name="twitter:description" content="This is a short overview of why averages don’t work well for evaluating Likert scale or other ordinal-scale data, and what to do instead, with examples using R." />
-  
+  <meta name="twitter:image" content="images/likert_cover.jpg" />
 
 <meta name="author" content="Dwight Barry">
 
 
-<meta name="date" content="2017-01-02">
+<meta name="date" content="2017-01-03">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="Advanced.html">
+<link rel="prev" href="is-there-a-significant-difference.html">
 
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
@@ -64,33 +64,35 @@
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">A Minimal Book Example</a></li>
+<li><a href="./">Do not use means with Likert scales</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Summary</a></li>
-<li class="chapter" data-level="2" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>2</b> A simple example</a></li>
-<li class="chapter" data-level="3" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>3</b> Visualization</a><ul>
-<li class="chapter" data-level="3.1" data-path="visualization.html"><a href="visualization.html#histograms"><i class="fa fa-check"></i><b>3.1</b> Histograms</a></li>
-<li class="chapter" data-level="3.2" data-path="visualization.html"><a href="visualization.html#likert-charts"><i class="fa fa-check"></i><b>3.2</b> Likert charts</a></li>
-<li class="chapter" data-level="3.3" data-path="visualization.html"><a href="visualization.html#other-ordinal-scale-visualizations"><i class="fa fa-check"></i><b>3.3</b> Other ordinal-scale visualizations</a><ul>
-<li class="chapter" data-level="3.3.1" data-path="visualization.html"><a href="visualization.html#likert-chart-with-response-count-histograms"><i class="fa fa-check"></i><b>3.3.1</b> Likert chart with response count histograms</a></li>
-<li class="chapter" data-level="3.3.2" data-path="visualization.html"><a href="visualization.html#uncentered-likert-chart-for-multiple-questions"><i class="fa fa-check"></i><b>3.3.2</b> Uncentered Likert chart for multiple questions</a></li>
-<li class="chapter" data-level="3.3.3" data-path="visualization.html"><a href="visualization.html#heatmap"><i class="fa fa-check"></i><b>3.3.3</b> Heatmap</a></li>
-<li class="chapter" data-level="3.3.4" data-path="visualization.html"><a href="visualization.html#likert-chart-with-subgroups"><i class="fa fa-check"></i><b>3.3.4</b> Likert chart with subgroups</a></li>
-<li class="chapter" data-level="3.3.5" data-path="visualization.html"><a href="visualization.html#density-histograms"><i class="fa fa-check"></i><b>3.3.5</b> Density histograms</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About</a></li>
+<li class="chapter" data-level="1" data-path="summary.html"><a href="summary.html"><i class="fa fa-check"></i><b>1</b> Summary</a></li>
+<li class="chapter" data-level="2" data-path="why-not-a-simple-example.html"><a href="why-not-a-simple-example.html"><i class="fa fa-check"></i><b>2</b> Why not? A simple example</a></li>
+<li class="chapter" data-level="3" data-path="always-visualize.html"><a href="always-visualize.html"><i class="fa fa-check"></i><b>3</b> <em>Always</em> visualize</a><ul>
+<li class="chapter" data-level="3.1" data-path="always-visualize.html"><a href="always-visualize.html#histograms"><i class="fa fa-check"></i><b>3.1</b> Histograms</a></li>
+<li class="chapter" data-level="3.2" data-path="always-visualize.html"><a href="always-visualize.html#likert-charts"><i class="fa fa-check"></i><b>3.2</b> Likert charts</a></li>
+<li class="chapter" data-level="3.3" data-path="always-visualize.html"><a href="always-visualize.html#other-ordinal-scale-visualizations"><i class="fa fa-check"></i><b>3.3</b> Other ordinal-scale visualizations</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="always-visualize.html"><a href="always-visualize.html#likert-chart-with-response-count-histograms"><i class="fa fa-check"></i><b>3.3.1</b> Likert chart with response count histograms</a></li>
+<li class="chapter" data-level="3.3.2" data-path="always-visualize.html"><a href="always-visualize.html#uncentered-likert-chart-for-multiple-questions"><i class="fa fa-check"></i><b>3.3.2</b> Uncentered Likert chart for multiple questions</a></li>
+<li class="chapter" data-level="3.3.3" data-path="always-visualize.html"><a href="always-visualize.html#heatmap"><i class="fa fa-check"></i><b>3.3.3</b> Heatmap</a></li>
+<li class="chapter" data-level="3.3.4" data-path="always-visualize.html"><a href="always-visualize.html#likert-chart-with-subgroups"><i class="fa fa-check"></i><b>3.3.4</b> Likert chart with subgroups</a></li>
+<li class="chapter" data-level="3.3.5" data-path="always-visualize.html"><a href="always-visualize.html#density-histograms"><i class="fa fa-check"></i><b>3.3.5</b> Density histograms</a></li>
+<li class="chapter" data-level="3.3.6" data-path="always-visualize.html"><a href="always-visualize.html#scatterplots-and-ordinal-correlation"><i class="fa fa-check"></i><b>3.3.6</b> Scatterplots and ordinal correlation</a></li>
 </ul></li>
+<li class="chapter" data-level="3.4" data-path="always-visualize.html"><a href="always-visualize.html#similarities-correlation-between-ordinal-scale-variables"><i class="fa fa-check"></i><b>3.4</b> Similarities: correlation between ordinal-scale variables</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="tips-and-tricks.html"><a href="tips-and-tricks.html"><i class="fa fa-check"></i><b>4</b> Tips and Tricks</a><ul>
-<li class="chapter" data-level="4.1" data-path="tips-and-tricks.html"><a href="tips-and-tricks.html#neutral-scores-matter"><i class="fa fa-check"></i><b>4.1</b> <em>Neutral</em> scores matter</a></li>
-<li class="chapter" data-level="4.2" data-path="tips-and-tricks.html"><a href="tips-and-tricks.html#how-many-respondents-are-enough"><i class="fa fa-check"></i><b>4.2</b> How many respondents are enough?</a></li>
+<li class="chapter" data-level="4" data-path="neutral-scores-matter.html"><a href="neutral-scores-matter.html"><i class="fa fa-check"></i><b>4</b> <em>Neutral</em> scores matter</a></li>
+<li class="chapter" data-level="5" data-path="how-many-respondents-are-enough.html"><a href="how-many-respondents-are-enough.html"><i class="fa fa-check"></i><b>5</b> How many respondents are enough?</a></li>
+<li class="chapter" data-level="6" data-path="is-there-a-significant-difference.html"><a href="is-there-a-significant-difference.html"><i class="fa fa-check"></i><b>6</b> Is there a <em>significant</em> difference?</a><ul>
+<li class="chapter" data-level="6.1" data-path="is-there-a-significant-difference.html"><a href="is-there-a-significant-difference.html#permutation-mann-whitney-tests"><i class="fa fa-check"></i><b>6.1</b> Permutation &amp; Mann-Whitney tests</a></li>
+<li class="chapter" data-level="6.2" data-path="is-there-a-significant-difference.html"><a href="is-there-a-significant-difference.html#effect-sizes-cis"><i class="fa fa-check"></i><b>6.2</b> Effect sizes &amp; CIs</a></li>
+<li class="chapter" data-level="6.3" data-path="is-there-a-significant-difference.html"><a href="is-there-a-significant-difference.html#chi2-test"><i class="fa fa-check"></i><b>6.3</b> <span class="math inline">\(\chi^2\)</span> test</a></li>
+<li class="chapter" data-level="6.4" data-path="is-there-a-significant-difference.html"><a href="is-there-a-significant-difference.html#Advanced"><i class="fa fa-check"></i><b>6.4</b> Multinomial regression</a></li>
+<li class="chapter" data-level="6.5" data-path="is-there-a-significant-difference.html"><a href="is-there-a-significant-difference.html#proportional-odds-regression"><i class="fa fa-check"></i><b>6.5</b> Proportional-odds regression</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="is-there-a-significant-difference.html"><a href="is-there-a-significant-difference.html"><i class="fa fa-check"></i><b>5</b> Is there a <em>significant</em> difference?</a></li>
-<li class="chapter" data-level="6" data-path="Advanced.html"><a href="Advanced.html"><i class="fa fa-check"></i><b>6</b> Advanced analytics for ordinal scaled variables</a><ul>
-<li class="chapter" data-level="6.1" data-path="Advanced.html"><a href="Advanced.html#chi2-test"><i class="fa fa-check"></i><b>6.1</b> <span class="math inline">\(\chi^2\)</span> test</a></li>
-<li class="chapter" data-level="6.2" data-path="Advanced.html"><a href="Advanced.html#multinomial-regression"><i class="fa fa-check"></i><b>6.2</b> Multinomial regression</a></li>
-<li class="chapter" data-level="6.3" data-path="Advanced.html"><a href="Advanced.html#proportional-odds-regression"><i class="fa fa-check"></i><b>6.3</b> Proportional-odds regression</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="Appendix.html"><a href="Appendix.html"><i class="fa fa-check"></i><b>7</b> Appendix: Measurement Levels &amp; Appropriate Summary Statistics</a></li>
+<li class="chapter" data-level="7" data-path="Appendix.html"><a href="Appendix.html"><i class="fa fa-check"></i><b>7</b> Appendix: Measurement Levels &amp; Summary Statistics {-}</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -103,7 +105,7 @@
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Do not use averages on Likert scale data</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Do not use averages with Likert scale data</a>
           </h1>
         </div>
 
@@ -112,7 +114,7 @@
 
             <section class="normal" id="section-">
 <div id="Appendix" class="section level1">
-<h1><span class="header-section-number">Chapter 7</span> Appendix: Measurement Levels &amp; Appropriate Summary Statistics</h1>
+<h1><span class="header-section-number">Chapter 7</span> Appendix: Measurement Levels &amp; Summary Statistics {-}</h1>
 <table>
 <colgroup>
 <col width="28%" />
@@ -223,7 +225,7 @@ Y*<br />
           </div>
         </div>
       </div>
-<a href="Advanced.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="is-there-a-significant-difference.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -252,10 +254,10 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/06-references.Rmd",
+"link": "https://github.com/Rmadillo/likert/edit/master/06-references.Rmd",
 "text": "Edit"
 },
-"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"download": ["likert.pdf", "likert.epub"],
 "toc": {
 "collapse": "subsection"
 }
