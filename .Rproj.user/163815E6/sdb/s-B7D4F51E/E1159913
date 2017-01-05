@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1483573103137.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "E1159913",
+    "lastKnownWriteTime" : 4294967302,
+    "last_content_update" : 1483573103137,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "9F845D7A",
+        "caption" : "pain_scores",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=pain_scores&cache_key=9F845D7A",
+        "displayedObservations" : "72",
+        "environment" : "",
+        "object" : "pain_scores",
+        "preview" : "0",
+        "totalObservations" : "72",
+        "variables" : "3"
+    },
+    "relative_order" : 10,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}
