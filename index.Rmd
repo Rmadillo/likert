@@ -42,7 +42,7 @@ knitr::include_graphics('/Users/dbarr1/Documents/R/bookdown/likert/images/cc-by-
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, comment = "> ", fig.height = 3, fig.align = "center")
 ```
 
-## R packgaes
+## R packgaes {-}
 
 ```{r setup}
 #### Packages ####
@@ -61,7 +61,7 @@ library(MASS)
 library(ordinal)
 ```
 
-## Data 
+## Data {-}
 
 ```{r datsets}
 #### Basic example data set ####
