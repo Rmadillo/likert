@@ -1,7 +1,0 @@
-"0","total_surgeries = pain_scores %>% 
-  group_by(Month) %>%
-  summarize(Surgeries = sum(Count))  %>%
-  mutate(percent = (Count / sum(Count)), cumsum = cumsum(percent), label = sum(Count))
-"
-"2","Error: object 'Count' not found
-"
