@@ -9,13 +9,14 @@ In this context, *stable* means that the data accurately represent true changes 
 The relative standard error (RSE) is the metric used to evaluate whether you have enough values for the results to be stable. The standard error is an estimate of the likely difference between the results and the true value (which in surveys, even of complete populations, can't be known exactly due to the reasons mentioned above). The *relative* standard error is the standard error expressed as a percent of the measure or number of responses, which is a constant function: $\frac{1}{\sqrt{responses}} * 100$. This function can be seen in the graph on the next page.    
 
 Generally, you want RSE values less than 20-25% to have some confidence that your results are stable.  
+The RSE-response count function is shown in Figure 10. The RSE associated with the use of six responses is marked with dark red, and the response count associated with an RSE of 25% is marked with dark blue.  
 
-*The RSE-response count function. The RSE associated with the use of 6 responses is marked with dark red, and the response count associated with an RSE of 25% is marked with dark blue.*  
-
-```{r rse, fig.width=8, fig.height=4.5, echo=FALSE}
+ 
+```{r rse, fig.width=8, fig.height=4.5}
 x = seq(1:50)
 rse = data.frame(x = x, y = (1 / sqrt(x)) * 100)
 
+# Figure 10
 ggplot(rse, aes(x = x, y = y)) +
   geom_line() +
   geom_segment(aes(x=6, y=0, xend=6, yend=41), color="darkred", arrow = arrow(length = unit(0.25, "cm"))) +
@@ -28,6 +29,4 @@ ggplot(rse, aes(x = x, y = y)) +
   geom_label(aes(x=-1.75, y=25), label = "25") +
   xlab("Number of responses") +
   ylab("Relative Standard Error")
-
 ```
-

@@ -26,7 +26,7 @@
 <meta name="author" content="Dwight Barry">
 
 
-<meta name="date" content="2017-01-03">
+<meta name="date" content="2017-01-04">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -105,7 +105,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About</a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#data-and-r-packages"><i class="fa fa-check"></i>Data and R packages</a></li>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#r-packgaes"><i class="fa fa-check"></i><b>0.1</b> R packgaes</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#data"><i class="fa fa-check"></i><b>0.2</b> Data</a></li>
 </ul></li>
 <li class="chapter" data-level="1" data-path="summary.html"><a href="summary.html"><i class="fa fa-check"></i><b>1</b> Summary</a></li>
 <li class="chapter" data-level="2" data-path="why-not-a-simple-example.html"><a href="why-not-a-simple-example.html"><i class="fa fa-check"></i><b>2</b> <em>Why not?</em> A simple example</a></li>
@@ -115,10 +116,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.3" data-path="always-visualize.html"><a href="always-visualize.html#other-ordinal-scale-visualizations"><i class="fa fa-check"></i><b>3.3</b> Other ordinal-scale visualizations</a><ul>
 <li class="chapter" data-level="3.3.1" data-path="always-visualize.html"><a href="always-visualize.html#heatmap"><i class="fa fa-check"></i><b>3.3.1</b> Heatmap</a></li>
 <li class="chapter" data-level="3.3.2" data-path="always-visualize.html"><a href="always-visualize.html#likert-chart-with-response-count-histograms"><i class="fa fa-check"></i><b>3.3.2</b> Likert chart with response count histograms</a></li>
-<li class="chapter" data-level="3.3.3" data-path="always-visualize.html"><a href="always-visualize.html#uncentered-likert-chart-for-multiple-questions"><i class="fa fa-check"></i><b>3.3.3</b> Uncentered Likert chart for multiple questions</a></li>
-<li class="chapter" data-level="3.3.4" data-path="always-visualize.html"><a href="always-visualize.html#likert-chart-with-subgroups"><i class="fa fa-check"></i><b>3.3.4</b> Likert chart with subgroups</a></li>
-<li class="chapter" data-level="3.3.5" data-path="always-visualize.html"><a href="always-visualize.html#density-histograms"><i class="fa fa-check"></i><b>3.3.5</b> Density histograms</a></li>
-<li class="chapter" data-level="3.3.6" data-path="always-visualize.html"><a href="always-visualize.html#scatterplots-and-ordinal-correlation"><i class="fa fa-check"></i><b>3.3.6</b> Scatterplots and ordinal correlation</a></li>
+<li class="chapter" data-level="3.3.3" data-path="always-visualize.html"><a href="always-visualize.html#likert-chart-with-subgroups"><i class="fa fa-check"></i><b>3.3.3</b> Likert chart with subgroups</a></li>
+<li class="chapter" data-level="3.3.4" data-path="always-visualize.html"><a href="always-visualize.html#density-histograms"><i class="fa fa-check"></i><b>3.3.4</b> Density histograms</a></li>
+<li class="chapter" data-level="3.3.5" data-path="always-visualize.html"><a href="always-visualize.html#scatterplots-ordinal-correlation"><i class="fa fa-check"></i><b>3.3.5</b> Scatterplots &amp; ordinal correlation</a></li>
+<li class="chapter" data-level="3.3.6" data-path="always-visualize.html"><a href="always-visualize.html#monitoring-ordinal-data"><i class="fa fa-check"></i><b>3.3.6</b> Monitoring ordinal data</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="neutral-scores-matter.html"><a href="neutral-scores-matter.html"><i class="fa fa-check"></i><b>4</b> <em>Neutral</em> scores matter</a></li>
@@ -130,6 +131,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="6.4" data-path="is-there-a-significant-difference.html"><a href="is-there-a-significant-difference.html#Advanced"><i class="fa fa-check"></i><b>6.4</b> Multinomial regression</a></li>
 <li class="chapter" data-level="6.5" data-path="is-there-a-significant-difference.html"><a href="is-there-a-significant-difference.html#proportional-odds-regression"><i class="fa fa-check"></i><b>6.5</b> Proportional-odds regression</a></li>
 </ul></li>
+<li class="chapter" data-level="7" data-path="a-final-word.html"><a href="a-final-word.html"><i class="fa fa-check"></i><b>7</b> A final word</a></li>
 <li class="chapter" data-level="" data-path="appendix-measurement-levels-summary-statistics.html"><a href="appendix-measurement-levels-summary-statistics.html"><i class="fa fa-check"></i>Appendix: Measurement Levels &amp; Summary Statistics</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -154,19 +156,23 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="header">
 <h1 class="title">Do not use averages with Likert scale data</h1>
 <h4 class="author"><em>Dwight Barry</em></h4>
-<h4 class="date"><em>2017-01-03</em></h4>
+<h4 class="date"><em>2017-01-04</em></h4>
 </div>
 <div id="about" class="section level1 unnumbered">
 <h1>About</h1>
-<p>This is a short overview of why averages don’t work well for evaluating Likert scale or other ordinal-scale data, and what to do instead, with examples using R. While the examples are focused on healthcare surveys, the lessons apply to any use of ordinal scale data.</p>
 <p><img src="images/likert_cover.jpg" width="408" style="display: block; margin: auto;" /></p>
-<p><em>Note: all of the data in this document is fake, created specifically to illustrate particular points.</em></p>
+<p>This is a short overview of why averages don’t work well for evaluating Likert scale or other ordinal-scale data, and what to do instead, with examples using R. While the examples are focused on healthcare surveys, the lessons apply to any use of ordinal scale data.</p>
+<p>Note: all of the data in this document is fake, created specifically to illustrate particular points.</p>
+<p><em>Contact/Twitter:</em> <span class="citation">@healthstatsdude</span></p>
+<p><em>PDF version:</em></p>
+<p><em>Website:</em> <a href="https://bookdown.org/Rmadillo/likert/" class="uri">https://bookdown.org/Rmadillo/likert/</a></p>
+<p><em>Corrections/Pull requests:</em> <a href="https://github.com/Rmadillo/likert" class="uri">https://github.com/Rmadillo/likert</a></p>
 <p><em>Cover image</em>: Gustave Doré, 1863. Illustration 12 for Cervantes’s <em>Don Quixote</em>. <a href="https://commons.wikimedia.org/w/index.php?curid=677913">Public Domain</a>.</p>
 <p><img src="images/cc-by-sa.png" width="44" /></p>
 <p><em>This work is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 License</a>.</em></p>
-<div id="data-and-r-packages" class="section level2 unnumbered">
-<h2>Data and R packages</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Packages</span>
+<div id="r-packgaes" class="section level2">
+<h2><span class="header-section-number">0.1</span> R packgaes</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">#### Packages ####
 <span class="kw">library</span>(grid)
 <span class="kw">library</span>(nnet)
 <span class="kw">library</span>(coin)
@@ -176,12 +182,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(AICcmodavg)
-<span class="co">#library(tidyr)</span>
+<span class="kw">library</span>(polycor)
 <span class="kw">library</span>(likert)
- 
-<span class="co"># Data</span>
-
-<span class="co"># Basic example data set</span>
+<span class="kw">library</span>(MASS)
+<span class="kw">library</span>(ordinal)</code></pre></div>
+</div>
+<div id="data" class="section level2">
+<h2><span class="header-section-number">0.2</span> Data</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">#### Basic example data set ####
 person =<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;A&#39;</span>,<span class="st">&#39;B&#39;</span>,<span class="st">&#39;C&#39;</span>,<span class="st">&#39;D&#39;</span>,<span class="st">&#39;E&#39;</span>,<span class="st">&#39;F&#39;</span>)
 
 <span class="co"># Original </span>
@@ -200,7 +208,8 @@ ex_1 =<span class="st"> </span><span class="kw">data.frame</span>(person, year1,
  
 ex_1_long =<span class="st"> </span>reshape2::<span class="kw">melt</span>(ex_1)
 
-<span class="co"># Larger example data set</span>
+#### Larger example data set ####
+
 <span class="kw">set.seed</span>(<span class="dv">29</span>)
 
 md =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Group =</span> <span class="kw">as.character</span>(<span class="st">&quot;MD&quot;</span>), 
@@ -224,8 +233,75 @@ both$Response2[make_NAs2] =<span class="st"> </span><span class="ot">NA</span>
                 <span class="st">&quot;My team works well together.&quot;</span>, 
                 <span class="st">&quot;I have the tools I need to do my job.&quot;</span>)
 
-<span class="co"># Save for revision</span>
-<span class="co"># likert_levels = c(&#39;Strongly Disagree&#39;, &#39;Disagree&#39;, &#39;Neither&#39;, &#39;Agree&#39;, &#39;Strongly Agree&#39;)</span></code></pre></div>
+#### Dashboarding pain scores example ####
+
+<span class="co"># Create list for random pain scores</span>
+pain_list =<span class="st"> </span><span class="kw">list</span>()
+
+for(i in <span class="dv">1</span>:<span class="dv">24</span>){
+  <span class="kw">set.seed</span>(i)
+  pain_level =<span class="st"> </span><span class="kw">ordered</span>(<span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;Low&quot;</span>, <span class="st">&quot;Medium&quot;</span>, <span class="st">&quot;High&quot;</span>), <span class="dt">size =</span> <span class="kw">sample</span>(<span class="dv">10</span>:<span class="dv">30</span>),
+    <span class="dt">replace =</span> T, <span class="dt">prob =</span> <span class="kw">c</span>(.<span class="dv">15</span>, .<span class="dv">45</span>, .<span class="dv">40</span>)), <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Low&quot;</span>, <span class="st">&quot;Medium&quot;</span>, <span class="st">&quot;High&quot;</span>))
+  pain_list[[i]] =<span class="st"> </span><span class="kw">table</span>(pain_level)
+}
+
+<span class="co"># Unlist into a data frame</span>
+pain_df =<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">matrix</span>(<span class="kw">unlist</span>(pain_list), <span class="dt">nrow=</span><span class="dv">24</span>, <span class="dt">byrow=</span>T))
+<span class="kw">colnames</span>(pain_df) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Low&quot;</span>, <span class="st">&quot;Medium&quot;</span>, <span class="st">&quot;High&quot;</span>)
+
+<span class="co"># Add some months</span>
+pain_scores =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Month =</span> <span class="kw">seq</span>(<span class="kw">as.Date</span>(<span class="st">&quot;2014-10-01&quot;</span>), <span class="dt">by =</span> <span class="st">&quot;month&quot;</span>, 
+  <span class="dt">length.out =</span> <span class="dv">24</span>), pain_df)
+
+<span class="co"># Melt into long form, I really should learn tidyr</span>
+pain_scores =<span class="st"> </span>reshape2::<span class="kw">melt</span>(pain_scores, <span class="dt">id.vars =</span> <span class="st">&quot;Month&quot;</span>, 
+  <span class="dt">variable.name =</span> <span class="st">&quot;Pain_Group&quot;</span>, <span class="dt">value.name =</span> <span class="st">&quot;Count&quot;</span>)
+
+<span class="co"># Summarize to get counts and percentages</span>
+surgeries_pain =<span class="st"> </span>pain_scores %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(Month) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Surgeries =</span> <span class="kw">sum</span>(Count), <span class="dt">percent =</span> (Count /<span class="st"> </span><span class="kw">sum</span>(Count)), 
+    <span class="dt">cumsum =</span> <span class="kw">cumsum</span>(percent))
+
+#### For use with chi-square and regression models ####
+
+<span class="co"># Get rid of NAs</span>
+both2 =<span class="st"> </span><span class="kw">na.omit</span>(both)
+
+<span class="co"># Rename columns to something more R-friendly</span>
+<span class="kw">names</span>(both2) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;EmployeeType&quot;</span>, <span class="st">&quot;Teamwork&quot;</span>, <span class="st">&quot;Tools&quot;</span>)
+
+<span class="co"># Reverse the levels so 5 will be at top of mosaic plot</span>
+both2$Teamwork =<span class="st"> </span><span class="kw">ordered</span>(both2$Teamwork, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;5&quot;</span>, <span class="st">&quot;4&quot;</span>, <span class="st">&quot;3&quot;</span>, <span class="st">&quot;2&quot;</span>, <span class="st">&quot;1&quot;</span>))
+
+<span class="co"># Make a table object</span>
+both2_tab =<span class="st"> </span><span class="kw">xtabs</span>(~<span class="st"> </span>both2$EmployeeType +<span class="st"> </span>both2$Teamwork)
+
+<span class="co"># For multinomial and prop odds models</span>
+both3 =<span class="st"> </span>both2
+
+<span class="co"># Bring axis back to normal</span>
+both3$Teamwork =<span class="st"> </span><span class="kw">ordered</span>(both3$Teamwork, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;1&quot;</span>, <span class="st">&quot;2&quot;</span>, <span class="st">&quot;3&quot;</span>, <span class="st">&quot;4&quot;</span>, <span class="st">&quot;5&quot;</span>))
+
+<span class="co"># Data frame for proportional odds regression</span>
+Teamwork_tab_long =<span class="st"> </span>both3[,<span class="dv">1</span>:<span class="dv">2</span>] %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(EmployeeType, Teamwork) %&gt;%
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">Count =</span> <span class="kw">n</span>())
+
+<span class="co"># Function to turn counts into rows I found laying around the web somewhere</span>
+countsToCases =<span class="st"> </span>function(x, <span class="dt">countcol =</span> <span class="st">&quot;Count&quot;</span>) {
+    <span class="co"># Get the row indices to pull from x</span>
+    idx =<span class="st"> </span><span class="kw">rep.int</span>(<span class="kw">seq_len</span>(<span class="kw">nrow</span>(x)), x[[countcol]])
+    <span class="co"># Drop count column</span>
+    x[[countcol]] =<span class="st"> </span><span class="ot">NULL</span>
+    <span class="co"># Get the rows from x</span>
+    x[idx, ]
+}
+
+<span class="co"># Make a data frame for prop odds</span>
+Teamwork_tab_long$Teamwork_Group =<span class="st"> </span><span class="kw">as.numeric</span>(Teamwork_tab_long$Teamwork) 
+Teamwork_tab_long$Teamwork =<span class="st"> </span><span class="kw">ordered</span>(Teamwork_tab_long$Teamwork) 
+tab_df =<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">countsToCases</span>(Teamwork_tab_long, <span class="dt">countcol=</span><span class="st">&quot;Count&quot;</span>))</code></pre></div>
 
 </div>
 </div>

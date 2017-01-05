@@ -4,7 +4,7 @@
  
 - When evaluated improperly---particularly through the use of averages---the results can be strikingly misleading. Obviously, misleading results could drive or promote action where none is warranted, and vice versa.  
  
-- In nearly all cases, not only is it mathematically wrong, **taking the average of a Likert-scale variable will *not* provide useful answers** to the questions end-users can use to make actionable decisions. In essence, the use of averages cannot account for the importance of capturing and understanding variabililty. Analysts should strive to avoid their use in any reporting solution or analytic product that uses ordinal-scale data.  
+- In nearly all cases, not only is it mathematically wrong, **taking the average of a Likert-scale variable will *not* provide useful answers** to the questions managers can use to make actionable decisions. In essence, the use of averages cannot account for the importance of capturing and understanding variability. Analysts should strive to avoid their use in any reporting solution or analytic product that uses ordinal-scale data.  
  
 - Better ways to represent ordinal-value results include histograms of the values themselves, the use of well-supported "top-box"-type proportions, and/or bar charts of percentage by score or score category (e.g., favorable/neutral/unfavorable).  
 

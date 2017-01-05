@@ -26,7 +26,7 @@
 <meta name="author" content="Dwight Barry">
 
 
-<meta name="date" content="2017-01-03">
+<meta name="date" content="2017-01-04">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -105,7 +105,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About</a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#data-and-r-packages"><i class="fa fa-check"></i>Data and R packages</a></li>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#r-packgaes"><i class="fa fa-check"></i><b>0.1</b> R packgaes</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#data"><i class="fa fa-check"></i><b>0.2</b> Data</a></li>
 </ul></li>
 <li class="chapter" data-level="1" data-path="summary.html"><a href="summary.html"><i class="fa fa-check"></i><b>1</b> Summary</a></li>
 <li class="chapter" data-level="2" data-path="why-not-a-simple-example.html"><a href="why-not-a-simple-example.html"><i class="fa fa-check"></i><b>2</b> <em>Why not?</em> A simple example</a></li>
@@ -115,10 +116,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.3" data-path="always-visualize.html"><a href="always-visualize.html#other-ordinal-scale-visualizations"><i class="fa fa-check"></i><b>3.3</b> Other ordinal-scale visualizations</a><ul>
 <li class="chapter" data-level="3.3.1" data-path="always-visualize.html"><a href="always-visualize.html#heatmap"><i class="fa fa-check"></i><b>3.3.1</b> Heatmap</a></li>
 <li class="chapter" data-level="3.3.2" data-path="always-visualize.html"><a href="always-visualize.html#likert-chart-with-response-count-histograms"><i class="fa fa-check"></i><b>3.3.2</b> Likert chart with response count histograms</a></li>
-<li class="chapter" data-level="3.3.3" data-path="always-visualize.html"><a href="always-visualize.html#uncentered-likert-chart-for-multiple-questions"><i class="fa fa-check"></i><b>3.3.3</b> Uncentered Likert chart for multiple questions</a></li>
-<li class="chapter" data-level="3.3.4" data-path="always-visualize.html"><a href="always-visualize.html#likert-chart-with-subgroups"><i class="fa fa-check"></i><b>3.3.4</b> Likert chart with subgroups</a></li>
-<li class="chapter" data-level="3.3.5" data-path="always-visualize.html"><a href="always-visualize.html#density-histograms"><i class="fa fa-check"></i><b>3.3.5</b> Density histograms</a></li>
-<li class="chapter" data-level="3.3.6" data-path="always-visualize.html"><a href="always-visualize.html#scatterplots-and-ordinal-correlation"><i class="fa fa-check"></i><b>3.3.6</b> Scatterplots and ordinal correlation</a></li>
+<li class="chapter" data-level="3.3.3" data-path="always-visualize.html"><a href="always-visualize.html#likert-chart-with-subgroups"><i class="fa fa-check"></i><b>3.3.3</b> Likert chart with subgroups</a></li>
+<li class="chapter" data-level="3.3.4" data-path="always-visualize.html"><a href="always-visualize.html#density-histograms"><i class="fa fa-check"></i><b>3.3.4</b> Density histograms</a></li>
+<li class="chapter" data-level="3.3.5" data-path="always-visualize.html"><a href="always-visualize.html#scatterplots-ordinal-correlation"><i class="fa fa-check"></i><b>3.3.5</b> Scatterplots &amp; ordinal correlation</a></li>
+<li class="chapter" data-level="3.3.6" data-path="always-visualize.html"><a href="always-visualize.html#monitoring-ordinal-data"><i class="fa fa-check"></i><b>3.3.6</b> Monitoring ordinal data</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="neutral-scores-matter.html"><a href="neutral-scores-matter.html"><i class="fa fa-check"></i><b>4</b> <em>Neutral</em> scores matter</a></li>
@@ -130,6 +131,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="6.4" data-path="is-there-a-significant-difference.html"><a href="is-there-a-significant-difference.html#Advanced"><i class="fa fa-check"></i><b>6.4</b> Multinomial regression</a></li>
 <li class="chapter" data-level="6.5" data-path="is-there-a-significant-difference.html"><a href="is-there-a-significant-difference.html#proportional-odds-regression"><i class="fa fa-check"></i><b>6.5</b> Proportional-odds regression</a></li>
 </ul></li>
+<li class="chapter" data-level="7" data-path="a-final-word.html"><a href="a-final-word.html"><i class="fa fa-check"></i><b>7</b> A final word</a></li>
 <li class="chapter" data-level="" data-path="appendix-measurement-levels-summary-statistics.html"><a href="appendix-measurement-levels-summary-statistics.html"><i class="fa fa-check"></i>Appendix: Measurement Levels &amp; Summary Statistics</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -156,8 +158,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="histograms" class="section level2">
 <h2><span class="header-section-number">3.1</span> Histograms</h2>
 <p>Histograms of the actual score values are the best way to visualize Likert data—they have two real axes, showing counts by score value or category, so you can parse the visual and understand the results very quickly. Using the same data as above, you can instantly see that the “improvement” in year 2 was perhaps not an improvement after all: while most respondents appear to be satisfied above what they thought in year 1, one respondent may be at risk of leaving.</p>
-<p><em>Histogram of example Likert scale data.</em></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(ex_1_long, <span class="kw">aes</span>(value)) +
+<p><em>Histogram of simple example Likert scale data.</em></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Figure 1</span>
+<span class="kw">ggplot</span>(ex_1_long, <span class="kw">aes</span>(value)) +
 <span class="st">    </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth=</span><span class="dv">1</span>) +
 <span class="st">    </span><span class="kw">facet_wrap</span>(~variable, <span class="dt">ncol=</span><span class="dv">1</span>) +
 <span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;Likert Scale Value&quot;</span>) +
@@ -168,69 +171,94 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2><span class="header-section-number">3.2</span> Likert charts</h2>
 <p>The main disadvantage of histograms is space; Likert charts—which are in essence just stacked bar charts—are far more compact. The disadvantage is that it takes slightly longer for a user to parse them, but when faced with lots of questions or groupings, they tend to be a better option.</p>
 <p>There are two kinds of Likert charts—those that use a center line for a point of reference, and those that do not, in which case they are simply percentage bar charts for individual questions or are mosaic plots when comparing groupings. In the graphs below, each score value has its own color, and each score category—e.g., unfavorable is 1-2, neutral is 3, and favorable is 4-5 on a 5-point scale—is summarized by a percentage value at the left, middle/interior, and right sides of the bar, respectively.</p>
+<p>The <code>likert</code> package provides some out-of-the-box plots for this type of data, though you must convert the numeric values to factors for it to work.</p>
 <p><em>Centered Likert chart.</em></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ex_1[<span class="dv">2</span>:<span class="dv">5</span>] =<span class="st"> </span><span class="kw">lapply</span>(ex_1[<span class="dv">2</span>:<span class="dv">5</span>], factor, <span class="dt">levels =</span> <span class="dv">1</span>:<span class="dv">5</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Covert values to factors</span>
+ex_1[<span class="dv">2</span>:<span class="dv">5</span>] =<span class="st"> </span><span class="kw">lapply</span>(ex_1[<span class="dv">2</span>:<span class="dv">5</span>], factor, <span class="dt">levels =</span> <span class="dv">1</span>:<span class="dv">5</span>)
+
+<span class="co"># Create a likert object</span>
 ex_1_likert =<span class="st"> </span><span class="kw">likert</span>(ex_1[<span class="dv">2</span>:<span class="dv">5</span>])
+
+<span class="co"># Figure 2</span>
 <span class="kw">plot</span>(ex_1_likert, <span class="dt">ordered =</span> <span class="ot">FALSE</span>, <span class="dt">group.order =</span> <span class="kw">names</span>(ex_1[<span class="dv">2</span>:<span class="dv">5</span>]))</code></pre></div>
 <p><img src="likert_files/figure-html/ex_1_likert-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p><em>Uncentered Likert chart (aka percent bar chart).</em></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(ex_1_likert, <span class="dt">ordered =</span> <span class="ot">FALSE</span>, <span class="dt">centered =</span> <span class="ot">FALSE</span>, <span class="dt">group.order=</span><span class="kw">names</span>(ex_1[<span class="dv">2</span>:<span class="dv">5</span>]))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Figure 3</span>
+<span class="kw">plot</span>(ex_1_likert, <span class="dt">ordered =</span> <span class="ot">FALSE</span>, <span class="dt">centered =</span> <span class="ot">FALSE</span>, <span class="dt">group.order=</span><span class="kw">names</span>(ex_1[<span class="dv">2</span>:<span class="dv">5</span>]))</code></pre></div>
 <p><img src="likert_files/figure-html/ex_1_likert_percent-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Neither Likert chart type is as clear as the histogram at making the results immediately understandable, but again, histograms take more space, and busy decision makers often need to see the forest (all the questions) at the expense of some trees (each question). In this case, analysts might use the histograms to explore potentially important results themselves, and then use Likert charts in a report with some strategically-placed text highlighting important patterns they found with the histograms.</p>
 </div>
 <div id="other-ordinal-scale-visualizations" class="section level2">
 <h2><span class="header-section-number">3.3</span> Other ordinal-scale visualizations</h2>
 <p>We’ll use a larger data set in this section to illustrate other visualizations of ordinal data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create likert object for example data set 2</span>
+ex_2_likert =<span class="st"> </span><span class="kw">likert</span>(both[<span class="dv">2</span>:<span class="dv">3</span>])</code></pre></div>
 <div id="heatmap" class="section level3">
 <h3><span class="header-section-number">3.3.1</span> Heatmap</h3>
-<p><em>Heatmap of the response frequency for two different questions. While the use of means and SDs is inappropriate, this particular example directly illustrates why those values don’t capture the response patterns in the data.</em></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ex_2_likert =<span class="st"> </span><span class="kw">likert</span>(both[<span class="dv">2</span>:<span class="dv">3</span>])
-
+<p>Figure 4 shows a heatmap of the response frequency for two different questions (e.g., as within a single year’s survey). While the use of means and SDs is inappropriate, this particular example directly illustrates why those values don’t capture the response patterns in the data.</p>
+<p><em>Heatmap of the response frequency for two different questions.</em></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Figure 4</span>
 <span class="kw">plot</span>(ex_2_likert, <span class="dt">type =</span> <span class="st">&quot;heat&quot;</span>)</code></pre></div>
 <p><img src="likert_files/figure-html/likert_viz3-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 <div id="likert-chart-with-response-count-histograms" class="section level3">
 <h3><span class="header-section-number">3.3.2</span> Likert chart with response count histograms</h3>
-<p><em>A Likert chart for two different questions (e.g., as within a single year’s survey), with a count histogram to show number of responses and non-answers for each question.</em></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(ex_2_likert, <span class="dt">include.histogram =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>The same data as seen in the heatmap above is more clearly shown with a Likert chart. Another option available with <code>likert</code> objects is to include count histogram to show number of responses and non-answers for each question.</p>
+<p><em>Likert chart of the response frequency for two different questions.</em></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Figure 5</span>
+<span class="kw">plot</span>(ex_2_likert, <span class="dt">include.histogram =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p><img src="likert_files/figure-html/likert_viz1-1.png" width="912" style="display: block; margin: auto;" /></p>
 </div>
-<div id="uncentered-likert-chart-for-multiple-questions" class="section level3">
-<h3><span class="header-section-number">3.3.3</span> Uncentered Likert chart for multiple questions</h3>
-<p><em>An uncentered Likert chart for two different questions.</em></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(ex_2_likert, <span class="dt">centered =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<p><img src="likert_files/figure-html/likert_viz2-1.png" width="912" style="display: block; margin: auto;" /></p>
-</div>
 <div id="likert-chart-with-subgroups" class="section level3">
-<h3><span class="header-section-number">3.3.4</span> Likert chart with subgroups</h3>
-<p><em>Subgroups can sometimes reveal patterns not seen in aggregate data. For example, compare the overall results for “My team works well together” in the graphs above with the responses when broken out by the subgroups of MDs and RNs (below, bottom panel).</em></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">both_likert_2 =<span class="st"> </span><span class="kw">likert</span>(both[, <span class="kw">c</span>(<span class="dv">2</span>:<span class="dv">3</span>), <span class="dt">drop =</span> <span class="ot">FALSE</span>], <span class="dt">grouping =</span> both$EmployeeType)
+<h3><span class="header-section-number">3.3.3</span> Likert chart with subgroups</h3>
+<p>Subgroups can sometimes reveal patterns not seen in aggregate data. For example, compare the overall results for “My team works well together” in Figure 5 with the responses when broken out by the subgroups of MDs and RNs in Figure 6.</p>
+<p><em>Likert chart of the response frequency for two different questions, grouped by MDs and RNs.</em></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create likert object with groupings included</span>
+both_likert_2 =<span class="st"> </span><span class="kw">likert</span>(both[, <span class="kw">c</span>(<span class="dv">2</span>:<span class="dv">3</span>), <span class="dt">drop =</span> <span class="ot">FALSE</span>], <span class="dt">grouping =</span> both$EmployeeType)
 
-<span class="co"># New ggplot 2.2 broke the grouping plots</span>
-<span class="co"># plot(both_likert_2, include.histogram = TRUE)</span>
-<span class="co"># Using edited function; see raw code for this book for details</span>
-<span class="kw">likert.bar.plot</span>(both_likert_2, <span class="dt">include.histogram =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<span class="co"># Figure 6</span>
+<span class="kw">plot</span>(both_likert_2, <span class="dt">include.histogram =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p><img src="likert_files/figure-html/likert_viz4-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 <div id="density-histograms" class="section level3">
-<h3><span class="header-section-number">3.3.5</span> Density histograms</h3>
-<p><em>Density plots for the same data shown above. While using a density plot on ordinal data is also statistically inappropriate, it can be a useful tool for an analyst. Bar histograms are difficult to overlay subgroups or different years for a direct comparsion, so must be separated into facets instead, as was seen in the first graph in this chapter. Density plots are easier to overlay to show these comparisons, so while not appropriate for a report, they can be useful tools for an analyst during the exploration phase.</em></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(both_likert_2, <span class="dt">type =</span> <span class="st">&quot;density&quot;</span>)</code></pre></div>
+<h3><span class="header-section-number">3.3.4</span> Density histograms</h3>
+<p>While using a density plot on ordinal data is also statistically inappropriate, it can be a useful tool for an analyst. Bar histograms are difficult to overlay subgroups or different years for a direct comparsion, so must be separated into facets instead, as was seen in Figure 1. Density plots are easier to overlay to show these comparisons, so while not appropriate for a report or dashboard, they can be really useful tools for an analyst during the exploration phase.</p>
+<p><em>Density histograms of the response frequency for two different questions, with a grouping variable (MDs and RNs).</em></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Figure 7</span>
+<span class="kw">plot</span>(both_likert_2, <span class="dt">type =</span> <span class="st">&quot;density&quot;</span>)</code></pre></div>
 <p><img src="likert_files/figure-html/likert_viz5-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-<div id="scatterplots-and-ordinal-correlation" class="section level3">
-<h3><span class="header-section-number">3.3.6</span> Scatterplots and ordinal correlation</h3>
+<div id="scatterplots-ordinal-correlation" class="section level3">
+<h3><span class="header-section-number">3.3.5</span> Scatterplots &amp; ordinal correlation</h3>
 <p>Although traditionally many analysts used non-parametric correlation like Spearman’s or Kendall’s, <a href="https://en.wikipedia.org/wiki/Polychoric_correlation">polychoric correlation</a> is the proper tool to assess similarities between Likert scale results. (Polyserial correlation is used when one variable is numeric and the other is ordinal.)</p>
-<p><em>Scatterplot of ordinal comparisons (jittered to show point density) between the questions “My team works well together” and “I have the tools I need to do my job”.</em></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">poly_c_both =<span class="st"> </span>polycor::<span class="kw">polychor</span>(both[,<span class="dv">2</span>], both[,<span class="dv">3</span>])
-
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">poly_c_both =<span class="st"> </span><span class="kw">polychor</span>(both[,<span class="dv">2</span>], both[,<span class="dv">3</span>])</code></pre></div>
+<p>The polychoric correlation coefficient between “My team works well together” and “I have the tools I need to do my job” is 0.0579. As expected, that suggests that there is no relationship between the responses to these two questions. It’s fairly easy to see this lack of relationship in a scatterplot, with the points jittered to give a sense of response density.</p>
+<p><em>Scatterplot of ordinal comparisons (jittered to show point density) between the questions ‘My team works well together’ and ‘I have the tools I need to do my job’.</em></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Figure 8</span>
 <span class="kw">ggplot</span>(both, <span class="kw">aes</span>(both[,<span class="dv">2</span>], both[,<span class="dv">3</span>], <span class="dt">group=</span>EmployeeType, <span class="dt">color=</span>EmployeeType)) +
 <span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">na.rm=</span><span class="ot">TRUE</span>, <span class="dt">width =</span> <span class="fl">0.15</span>, <span class="dt">height =</span> <span class="fl">0.15</span>, <span class="dt">alpha=</span><span class="fl">0.6</span>, <span class="dt">size=</span><span class="dv">3</span>) +
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;My team works well together&quot;</span>) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;I have the tools I need to do my job&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_equal</span>()</code></pre></div>
-<p><img src="likert_files/figure-html/polyc-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>The polychoric correlation coefficient between “My team works well together” and “I have the tools I need to do my job” is 0.0579. As expected, that suggests that there is no relationship between the responses to these two questions.</p>
+<p><img src="likert_files/figure-html/polyc_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="monitoring-ordinal-data" class="section level3">
+<h3><span class="header-section-number">3.3.6</span> Monitoring ordinal data</h3>
+<p>In some cases, you may want to monitor data that uses an ordinal scale. If your metric is a “top box” type of score, a simple line chart can show that data over time; if it’s monitoring a stable process, statistical process control methods can be used as well.</p>
+<p>If you want to monitor a more complete view of the data, a stacked percentage bar chart shows you trends across the time series.</p>
+<p>Pain scores are a common outcome measure in surgeries, which are usually recorded on an intensity scale of 1-10, with 10 being the highest pain imaginable. Many researchers and quality improvement analysts collapse those values into Low (1-3), Medium (4-7), and High (8-10) categories, as the meaning of the exact values varies from patient to patient as well as between clinicians.</p>
+<p>In this example (Figure 9), the maximum pain score for each patient in the 24 hours following a surgery are recorded, and assigned to a pain category. The total number of patients with maximum pain scores in each pain category are summed each month.</p>
+<p><em>Monitoring maximum pain scores with a stacked percentage bar chart. Total surgeries performed that month occur just below each bar.</em></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Figure 9</span>
+<span class="kw">ggplot</span>(surgeries_pain, <span class="kw">aes</span>(<span class="dt">x =</span> Month, <span class="dt">y =</span> Count, <span class="dt">fill =</span> Pain_Group)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="st">&quot;fill&quot;</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales::percent) +
+<span class="st">  </span><span class="kw">scale_fill_brewer</span>(<span class="dt">name =</span> <span class="st">&quot;Pain Groups:&quot;</span>, <span class="dt">type =</span> <span class="st">&quot;div&quot;</span>, <span class="dt">palette =</span> <span class="st">&quot;Spectral&quot;</span>, <span class="dt">direction =</span> -<span class="dv">1</span>) +
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">y =</span> -<span class="fl">0.02</span>, <span class="dt">label =</span> Surgeries), <span class="dt">size =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;gray40&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Proportion&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_bw</span>() +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;top&quot;</span>)</code></pre></div>
+<p><img src="likert_files/figure-html/monitoring-1.png" width="672" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>

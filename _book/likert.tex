@@ -124,7 +124,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2017-01-03}
+  \date{2017-01-04}
 
 \usepackage{booktabs}
 
@@ -138,33 +138,41 @@
 \chapter*{About}\label{about}
 \addcontentsline{toc}{chapter}{About}
 
+\begin{center}\includegraphics[width=11.35in]{images/likert_cover} \end{center}
+
 This is a short overview of why averages don't work well for evaluating
 Likert scale or other ordinal-scale data, and what to do instead, with
 examples using R. While the examples are focused on healthcare surveys,
 the lessons apply to any use of ordinal scale data.
 
-\begin{center}\includegraphics[width=11.35in]{images/likert_cover} \end{center}
+Note: all of the data in this document is fake, created specifically to
+illustrate particular points.
 
-\emph{Note: all of the data in this document is fake, created
-specifically to illustrate particular points.}
+\emph{Contact/Twitter:} \citet{healthstatsdude}
+
+\emph{PDF version:}
+
+\emph{Website:} \url{https://bookdown.org/Rmadillo/likert/}
+
+\emph{Corrections/Pull requests:}
+\url{https://github.com/Rmadillo/likert}
 
 \emph{Cover image}: Gustave Doré, 1863. Illustration 12 for Cervantes's
 \emph{Don Quixote}.
 \href{https://commons.wikimedia.org/w/index.php?curid=677913}{Public
 Domain}.
 
-\includegraphics[width=1.22in]{images/cc-by-sa}
+\includegraphics[width=1.22in]{/Users/dbarr1/Documents/R/bookdown/likert/images/cc-by-sa}
 
 \emph{This work is licensed under a
 \href{https://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons
 Attribution-ShareAlike 4.0 License}.}
 
-\section*{Data and R packages}\label{data-and-r-packages}
-\addcontentsline{toc}{section}{Data and R packages}
+\section{R packgaes}\label{r-packgaes}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# Packages}
+\NormalTok{#### Packages ####}
 \KeywordTok{library}\NormalTok{(grid)}
 \KeywordTok{library}\NormalTok{(nnet)}
 \KeywordTok{library}\NormalTok{(coin)}
@@ -174,12 +182,18 @@ Attribution-ShareAlike 4.0 License}.}
 \KeywordTok{library}\NormalTok{(ggplot2)}
 \KeywordTok{library}\NormalTok{(dplyr)}
 \KeywordTok{library}\NormalTok{(AICcmodavg)}
-\CommentTok{#library(tidyr)}
+\KeywordTok{library}\NormalTok{(polycor)}
 \KeywordTok{library}\NormalTok{(likert)}
- 
-\CommentTok{# Data}
+\KeywordTok{library}\NormalTok{(MASS)}
+\KeywordTok{library}\NormalTok{(ordinal)}
+\end{Highlighting}
+\end{Shaded}
 
-\CommentTok{# Basic example data set}
+\section{Data}\label{data}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{#### Basic example data set ####}
 \NormalTok{person =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'A'}\NormalTok{,}\StringTok{'B'}\NormalTok{,}\StringTok{'C'}\NormalTok{,}\StringTok{'D'}\NormalTok{,}\StringTok{'E'}\NormalTok{,}\StringTok{'F'}\NormalTok{)}
 
 \CommentTok{# Original }
@@ -198,7 +212,8 @@ Attribution-ShareAlike 4.0 License}.}
  
 \NormalTok{ex_1_long =}\StringTok{ }\NormalTok{reshape2::}\KeywordTok{melt}\NormalTok{(ex_1)}
 
-\CommentTok{# Larger example data set}
+\NormalTok{#### Larger example data set ####}
+
 \KeywordTok{set.seed}\NormalTok{(}\DecValTok{29}\NormalTok{)}
 
 \NormalTok{md =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Group =} \KeywordTok{as.character}\NormalTok{(}\StringTok{"MD"}\NormalTok{), }
@@ -222,8 +237,75 @@ Attribution-ShareAlike 4.0 License}.}
                 \StringTok{"My team works well together."}\NormalTok{, }
                 \StringTok{"I have the tools I need to do my job."}\NormalTok{)}
 
-\CommentTok{# Save for revision}
-\CommentTok{# likert_levels = c('Strongly Disagree', 'Disagree', 'Neither', 'Agree', 'Strongly Agree')}
+\NormalTok{#### Dashboarding pain scores example ####}
+
+\CommentTok{# Create list for random pain scores}
+\NormalTok{pain_list =}\StringTok{ }\KeywordTok{list}\NormalTok{()}
+
+\NormalTok{for(i in }\DecValTok{1}\NormalTok{:}\DecValTok{24}\NormalTok{)\{}
+  \KeywordTok{set.seed}\NormalTok{(i)}
+  \NormalTok{pain_level =}\StringTok{ }\KeywordTok{ordered}\NormalTok{(}\KeywordTok{sample}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"Low"}\NormalTok{, }\StringTok{"Medium"}\NormalTok{, }\StringTok{"High"}\NormalTok{), }\DataTypeTok{size =} \KeywordTok{sample}\NormalTok{(}\DecValTok{10}\NormalTok{:}\DecValTok{30}\NormalTok{),}
+    \DataTypeTok{replace =} \NormalTok{T, }\DataTypeTok{prob =} \KeywordTok{c}\NormalTok{(.}\DecValTok{15}\NormalTok{, .}\DecValTok{45}\NormalTok{, .}\DecValTok{40}\NormalTok{)), }\DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\StringTok{"Low"}\NormalTok{, }\StringTok{"Medium"}\NormalTok{, }\StringTok{"High"}\NormalTok{))}
+  \NormalTok{pain_list[[i]] =}\StringTok{ }\KeywordTok{table}\NormalTok{(pain_level)}
+\NormalTok{\}}
+
+\CommentTok{# Unlist into a data frame}
+\NormalTok{pain_df =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\KeywordTok{matrix}\NormalTok{(}\KeywordTok{unlist}\NormalTok{(pain_list), }\DataTypeTok{nrow=}\DecValTok{24}\NormalTok{, }\DataTypeTok{byrow=}\NormalTok{T))}
+\KeywordTok{colnames}\NormalTok{(pain_df) =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Low"}\NormalTok{, }\StringTok{"Medium"}\NormalTok{, }\StringTok{"High"}\NormalTok{)}
+
+\CommentTok{# Add some months}
+\NormalTok{pain_scores =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Month =} \KeywordTok{seq}\NormalTok{(}\KeywordTok{as.Date}\NormalTok{(}\StringTok{"2014-10-01"}\NormalTok{), }\DataTypeTok{by =} \StringTok{"month"}\NormalTok{, }
+  \DataTypeTok{length.out =} \DecValTok{24}\NormalTok{), pain_df)}
+
+\CommentTok{# Melt into long form, I really should learn tidyr}
+\NormalTok{pain_scores =}\StringTok{ }\NormalTok{reshape2::}\KeywordTok{melt}\NormalTok{(pain_scores, }\DataTypeTok{id.vars =} \StringTok{"Month"}\NormalTok{, }
+  \DataTypeTok{variable.name =} \StringTok{"Pain_Group"}\NormalTok{, }\DataTypeTok{value.name =} \StringTok{"Count"}\NormalTok{)}
+
+\CommentTok{# Summarize to get counts and percentages}
+\NormalTok{surgeries_pain =}\StringTok{ }\NormalTok{pain_scores %>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(Month) %>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Surgeries =} \KeywordTok{sum}\NormalTok{(Count), }\DataTypeTok{percent =} \NormalTok{(Count /}\StringTok{ }\KeywordTok{sum}\NormalTok{(Count)), }
+    \DataTypeTok{cumsum =} \KeywordTok{cumsum}\NormalTok{(percent))}
+
+\NormalTok{#### For use with chi-square and regression models ####}
+
+\CommentTok{# Get rid of NAs}
+\NormalTok{both2 =}\StringTok{ }\KeywordTok{na.omit}\NormalTok{(both)}
+
+\CommentTok{# Rename columns to something more R-friendly}
+\KeywordTok{names}\NormalTok{(both2) =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"EmployeeType"}\NormalTok{, }\StringTok{"Teamwork"}\NormalTok{, }\StringTok{"Tools"}\NormalTok{)}
+
+\CommentTok{# Reverse the levels so 5 will be at top of mosaic plot}
+\NormalTok{both2$Teamwork =}\StringTok{ }\KeywordTok{ordered}\NormalTok{(both2$Teamwork, }\DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\StringTok{"5"}\NormalTok{, }\StringTok{"4"}\NormalTok{, }\StringTok{"3"}\NormalTok{, }\StringTok{"2"}\NormalTok{, }\StringTok{"1"}\NormalTok{))}
+
+\CommentTok{# Make a table object}
+\NormalTok{both2_tab =}\StringTok{ }\KeywordTok{xtabs}\NormalTok{(~}\StringTok{ }\NormalTok{both2$EmployeeType +}\StringTok{ }\NormalTok{both2$Teamwork)}
+
+\CommentTok{# For multinomial and prop odds models}
+\NormalTok{both3 =}\StringTok{ }\NormalTok{both2}
+
+\CommentTok{# Bring axis back to normal}
+\NormalTok{both3$Teamwork =}\StringTok{ }\KeywordTok{ordered}\NormalTok{(both3$Teamwork, }\DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\StringTok{"1"}\NormalTok{, }\StringTok{"2"}\NormalTok{, }\StringTok{"3"}\NormalTok{, }\StringTok{"4"}\NormalTok{, }\StringTok{"5"}\NormalTok{))}
+
+\CommentTok{# Data frame for proportional odds regression}
+\NormalTok{Teamwork_tab_long =}\StringTok{ }\NormalTok{both3[,}\DecValTok{1}\NormalTok{:}\DecValTok{2}\NormalTok{] %>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(EmployeeType, Teamwork) %>%}
+\StringTok{  }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{Count =} \KeywordTok{n}\NormalTok{())}
+
+\CommentTok{# Function to turn counts into rows I found laying around the web somewhere}
+\NormalTok{countsToCases =}\StringTok{ }\NormalTok{function(x, }\DataTypeTok{countcol =} \StringTok{"Count"}\NormalTok{) \{}
+    \CommentTok{# Get the row indices to pull from x}
+    \NormalTok{idx =}\StringTok{ }\KeywordTok{rep.int}\NormalTok{(}\KeywordTok{seq_len}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(x)), x[[countcol]])}
+    \CommentTok{# Drop count column}
+    \NormalTok{x[[countcol]] =}\StringTok{ }\OtherTok{NULL}
+    \CommentTok{# Get the rows from x}
+    \NormalTok{x[idx, ]}
+\NormalTok{\}}
+
+\CommentTok{# Make a data frame for prop odds}
+\NormalTok{Teamwork_tab_long$Teamwork_Group =}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(Teamwork_tab_long$Teamwork) }
+\NormalTok{Teamwork_tab_long$Teamwork =}\StringTok{ }\KeywordTok{ordered}\NormalTok{(Teamwork_tab_long$Teamwork) }
+\NormalTok{tab_df =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\KeywordTok{countsToCases}\NormalTok{(Teamwork_tab_long, }\DataTypeTok{countcol=}\StringTok{"Count"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 
@@ -242,9 +324,9 @@ Attribution-ShareAlike 4.0 License}.}
 \item
   In nearly all cases, not only is it mathematically wrong,
   \textbf{taking the average of a Likert-scale variable will \emph{not}
-  provide useful answers} to the questions end-users can use to make
+  provide useful answers} to the questions managers can use to make
   actionable decisions. In essence, the use of averages cannot account
-  for the importance of capturing and understanding variabililty.
+  for the importance of capturing and understanding variability.
   Analysts should strive to avoid their use in any reporting solution or
   analytic product that uses ordinal-scale data.
 \item
@@ -336,10 +418,11 @@ quickly. Using the same data as above, you can instantly see that the
 while most respondents appear to be satisfied above what they thought in
 year 1, one respondent may be at risk of leaving.
 
-\emph{Histogram of example Likert scale data.}
+\emph{Histogram of simple example Likert scale data.}
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{# Figure 1}
 \KeywordTok{ggplot}\NormalTok{(ex_1_long, }\KeywordTok{aes}\NormalTok{(value)) +}
 \StringTok{    }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{binwidth=}\DecValTok{1}\NormalTok{) +}
 \StringTok{    }\KeywordTok{facet_wrap}\NormalTok{(~variable, }\DataTypeTok{ncol=}\DecValTok{1}\NormalTok{) +}
@@ -367,12 +450,21 @@ neutral is 3, and favorable is 4-5 on a 5-point scale---is summarized by
 a percentage value at the left, middle/interior, and right sides of the
 bar, respectively.
 
+The \texttt{likert} package provides some out-of-the-box plots for this
+type of data, though you must convert the numeric values to factors for
+it to work.
+
 \emph{Centered Likert chart.}
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{# Covert values to factors}
 \NormalTok{ex_1[}\DecValTok{2}\NormalTok{:}\DecValTok{5}\NormalTok{] =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(ex_1[}\DecValTok{2}\NormalTok{:}\DecValTok{5}\NormalTok{], factor, }\DataTypeTok{levels =} \DecValTok{1}\NormalTok{:}\DecValTok{5}\NormalTok{)}
+
+\CommentTok{# Create a likert object}
 \NormalTok{ex_1_likert =}\StringTok{ }\KeywordTok{likert}\NormalTok{(ex_1[}\DecValTok{2}\NormalTok{:}\DecValTok{5}\NormalTok{])}
+
+\CommentTok{# Figure 2}
 \KeywordTok{plot}\NormalTok{(ex_1_likert, }\DataTypeTok{ordered =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{group.order =} \KeywordTok{names}\NormalTok{(ex_1[}\DecValTok{2}\NormalTok{:}\DecValTok{5}\NormalTok{]))}
 \end{Highlighting}
 \end{Shaded}
@@ -383,6 +475,7 @@ bar, respectively.
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{# Figure 3}
 \KeywordTok{plot}\NormalTok{(ex_1_likert, }\DataTypeTok{ordered =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{centered =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{group.order=}\KeywordTok{names}\NormalTok{(ex_1[}\DecValTok{2}\NormalTok{:}\DecValTok{5}\NormalTok{]))}
 \end{Highlighting}
 \end{Shaded}
@@ -404,17 +497,26 @@ visualizations}\label{other-ordinal-scale-visualizations}
 We'll use a larger data set in this section to illustrate other
 visualizations of ordinal data.
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Create likert object for example data set 2}
+\NormalTok{ex_2_likert =}\StringTok{ }\KeywordTok{likert}\NormalTok{(both[}\DecValTok{2}\NormalTok{:}\DecValTok{3}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
 \subsection{Heatmap}\label{heatmap}
 
-\emph{Heatmap of the response frequency for two different questions.
-While the use of means and SDs is inappropriate, this particular example
-directly illustrates why those values don't capture the response
-patterns in the data.}
+Figure 4 shows a heatmap of the response frequency for two different
+questions (e.g., as within a single year's survey). While the use of
+means and SDs is inappropriate, this particular example directly
+illustrates why those values don't capture the response patterns in the
+data.
+
+\emph{Heatmap of the response frequency for two different questions.}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{ex_2_likert =}\StringTok{ }\KeywordTok{likert}\NormalTok{(both[}\DecValTok{2}\NormalTok{:}\DecValTok{3}\NormalTok{])}
-
+\CommentTok{# Figure 4}
 \KeywordTok{plot}\NormalTok{(ex_2_likert, }\DataTypeTok{type =} \StringTok{"heat"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -424,47 +526,41 @@ patterns in the data.}
 \subsection{Likert chart with response count
 histograms}\label{likert-chart-with-response-count-histograms}
 
-\emph{A Likert chart for two different questions (e.g., as within a
-single year's survey), with a count histogram to show number of
-responses and non-answers for each question.}
+The same data as seen in the heatmap above is more clearly shown with a
+Likert chart. Another option available with \texttt{likert} objects is
+to include count histogram to show number of responses and non-answers
+for each question.
+
+\emph{Likert chart of the response frequency for two different
+questions.}
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{# Figure 5}
 \KeywordTok{plot}\NormalTok{(ex_2_likert, }\DataTypeTok{include.histogram =} \OtherTok{TRUE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{center}\includegraphics{likert_files/figure-latex/likert_viz1-1} \end{center}
 
-\subsection{Uncentered Likert chart for multiple
-questions}\label{uncentered-likert-chart-for-multiple-questions}
-
-\emph{An uncentered Likert chart for two different questions.}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{plot}\NormalTok{(ex_2_likert, }\DataTypeTok{centered =} \OtherTok{FALSE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}\includegraphics{likert_files/figure-latex/likert_viz2-1} \end{center}
-
 \subsection{Likert chart with
 subgroups}\label{likert-chart-with-subgroups}
 
-\emph{Subgroups can sometimes reveal patterns not seen in aggregate
-data. For example, compare the overall results for ``My team works well
-together'' in the graphs above with the responses when broken out by the
-subgroups of MDs and RNs (below, bottom panel).}
+Subgroups can sometimes reveal patterns not seen in aggregate data. For
+example, compare the overall results for ``My team works well together''
+in Figure 5 with the responses when broken out by the subgroups of MDs
+and RNs in Figure 6.
+
+\emph{Likert chart of the response frequency for two different
+questions, grouped by MDs and RNs.}
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{# Create likert object with groupings included}
 \NormalTok{both_likert_2 =}\StringTok{ }\KeywordTok{likert}\NormalTok{(both[, }\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{:}\DecValTok{3}\NormalTok{), }\DataTypeTok{drop =} \OtherTok{FALSE}\NormalTok{], }\DataTypeTok{grouping =} \NormalTok{both$EmployeeType)}
 
-\CommentTok{# New ggplot 2.2 broke the grouping plots}
-\CommentTok{# plot(both_likert_2, include.histogram = TRUE)}
-\CommentTok{# Using edited function; see raw code for this book for details}
-\KeywordTok{likert.bar.plot}\NormalTok{(both_likert_2, }\DataTypeTok{include.histogram =} \OtherTok{TRUE}\NormalTok{)}
+\CommentTok{# Figure 6}
+\KeywordTok{plot}\NormalTok{(both_likert_2, }\DataTypeTok{include.histogram =} \OtherTok{TRUE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -472,25 +568,28 @@ subgroups of MDs and RNs (below, bottom panel).}
 
 \subsection{Density histograms}\label{density-histograms}
 
-\emph{Density plots for the same data shown above. While using a density
-plot on ordinal data is also statistically inappropriate, it can be a
-useful tool for an analyst. Bar histograms are difficult to overlay
-subgroups or different years for a direct comparsion, so must be
-separated into facets instead, as was seen in the first graph in this
-chapter. Density plots are easier to overlay to show these comparisons,
-so while not appropriate for a report, they can be useful tools for an
-analyst during the exploration phase.}
+While using a density plot on ordinal data is also statistically
+inappropriate, it can be a useful tool for an analyst. Bar histograms
+are difficult to overlay subgroups or different years for a direct
+comparsion, so must be separated into facets instead, as was seen in
+Figure 1. Density plots are easier to overlay to show these comparisons,
+so while not appropriate for a report or dashboard, they can be really
+useful tools for an analyst during the exploration phase.
+
+\emph{Density histograms of the response frequency for two different
+questions, with a grouping variable (MDs and RNs).}
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{# Figure 7}
 \KeywordTok{plot}\NormalTok{(both_likert_2, }\DataTypeTok{type =} \StringTok{"density"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{center}\includegraphics{likert_files/figure-latex/likert_viz5-1} \end{center}
 
-\subsection{Scatterplots and ordinal
-correlation}\label{scatterplots-and-ordinal-correlation}
+\subsection{Scatterplots \& ordinal
+correlation}\label{scatterplots-ordinal-correlation}
 
 Although traditionally many analysts used non-parametric correlation
 like Spearman's or Kendall's,
@@ -499,14 +598,26 @@ correlation} is the proper tool to assess similarities between Likert
 scale results. (Polyserial correlation is used when one variable is
 numeric and the other is ordinal.)
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{poly_c_both =}\StringTok{ }\KeywordTok{polychor}\NormalTok{(both[,}\DecValTok{2}\NormalTok{], both[,}\DecValTok{3}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+The polychoric correlation coefficient between ``My team works well
+together'' and ``I have the tools I need to do my job'' is 0.0579. As
+expected, that suggests that there is no relationship between the
+responses to these two questions. It's fairly easy to see this lack of
+relationship in a scatterplot, with the points jittered to give a sense
+of response density.
+
 \emph{Scatterplot of ordinal comparisons (jittered to show point
-density) between the questions ``My team works well together'' and ``I
-have the tools I need to do my job''.}
+density) between the questions `My team works well together' and `I have
+the tools I need to do my job'.}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{poly_c_both =}\StringTok{ }\NormalTok{polycor::}\KeywordTok{polychor}\NormalTok{(both[,}\DecValTok{2}\NormalTok{], both[,}\DecValTok{3}\NormalTok{])}
-
+\CommentTok{# Figure 8}
 \KeywordTok{ggplot}\NormalTok{(both, }\KeywordTok{aes}\NormalTok{(both[,}\DecValTok{2}\NormalTok{], both[,}\DecValTok{3}\NormalTok{], }\DataTypeTok{group=}\NormalTok{EmployeeType, }\DataTypeTok{color=}\NormalTok{EmployeeType)) +}
 \StringTok{  }\KeywordTok{geom_jitter}\NormalTok{(}\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{width =} \FloatTok{0.15}\NormalTok{, }\DataTypeTok{height =} \FloatTok{0.15}\NormalTok{, }\DataTypeTok{alpha=}\FloatTok{0.6}\NormalTok{, }\DataTypeTok{size=}\DecValTok{3}\NormalTok{) +}
 \StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"My team works well together"}\NormalTok{) +}\StringTok{ }
@@ -515,12 +626,48 @@ have the tools I need to do my job''.}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{likert_files/figure-latex/polyc-1} \end{center}
+\begin{center}\includegraphics{likert_files/figure-latex/polyc_plot-1} \end{center}
 
-The polychoric correlation coefficient between ``My team works well
-together'' and ``I have the tools I need to do my job'' is 0.0579. As
-expected, that suggests that there is no relationship between the
-responses to these two questions.
+\subsection{Monitoring ordinal data}\label{monitoring-ordinal-data}
+
+In some cases, you may want to monitor data that uses an ordinal scale.
+If your metric is a ``top box'' type of score, a simple line chart can
+show that data over time; if it's monitoring a stable process,
+statistical process control methods can be used as well.
+
+If you want to monitor a more complete view of the data, a stacked
+percentage bar chart shows you trends across the time series.
+
+Pain scores are a common outcome measure in surgeries, which are usually
+recorded on an intensity scale of 1-10, with 10 being the highest pain
+imaginable. Many researchers and quality improvement analysts collapse
+those values into Low (1-3), Medium (4-7), and High (8-10) categories,
+as the meaning of the exact values varies from patient to patient as
+well as between clinicians.
+
+In this example (Figure 9), the maximum pain score for each patient in
+the 24 hours following a surgery are recorded, and assigned to a pain
+category. The total number of patients with maximum pain scores in each
+pain category are summed each month.
+
+\emph{Monitoring maximum pain scores with a stacked percentage bar
+chart. Total surgeries performed that month occur just below each bar.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Figure 9}
+\KeywordTok{ggplot}\NormalTok{(surgeries_pain, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{Month, }\DataTypeTok{y =} \NormalTok{Count, }\DataTypeTok{fill =} \NormalTok{Pain_Group)) +}
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{position =} \StringTok{"fill"}\NormalTok{, }\DataTypeTok{stat =} \StringTok{"identity"}\NormalTok{) +}
+\StringTok{  }\KeywordTok{scale_y_continuous}\NormalTok{(}\DataTypeTok{labels =} \NormalTok{scales::percent) +}
+\StringTok{  }\KeywordTok{scale_fill_brewer}\NormalTok{(}\DataTypeTok{name =} \StringTok{"Pain Groups:"}\NormalTok{, }\DataTypeTok{type =} \StringTok{"div"}\NormalTok{, }\DataTypeTok{palette =} \StringTok{"Spectral"}\NormalTok{, }\DataTypeTok{direction =} \NormalTok{-}\DecValTok{1}\NormalTok{) +}
+\StringTok{  }\KeywordTok{geom_text}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =} \NormalTok{-}\FloatTok{0.02}\NormalTok{, }\DataTypeTok{label =} \NormalTok{Surgeries), }\DataTypeTok{size =} \DecValTok{2}\NormalTok{, }\DataTypeTok{color =} \StringTok{"gray40"}\NormalTok{) +}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Proportion"}\NormalTok{) +}\StringTok{ }
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() +}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"top"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{likert_files/figure-latex/monitoring-1} \end{center}
 
 \chapter{\texorpdfstring{\emph{Neutral} scores
 matter}{Neutral scores matter}}\label{neutral-scores-matter}
@@ -562,6 +709,8 @@ large numbers of questions, it is important that the analyst understand
 the extent to which \emph{Neutral} and similar types of responses are a
 valid part of the measurement scale for each question.
 
+\begin{center}\includegraphics[width=8in]{images/no_neutral} \end{center}
+
 \chapter{How many respondents are
 enough?}\label{how-many-respondents-are-enough}
 
@@ -599,11 +748,32 @@ measure or number of responses, which is a constant function:
 graph on the next page.
 
 Generally, you want RSE values less than 20-25\% to have some confidence
-that your results are stable.
+that your results are stable.\\
+The RSE-response count function is shown in Figure 10. The RSE
+associated with the use of six responses is marked with dark red, and
+the response count associated with an RSE of 25\% is marked with dark
+blue.
 
-\emph{The RSE-response count function. The RSE associated with the use
-of 6 responses is marked with dark red, and the response count
-associated with an RSE of 25\% is marked with dark blue.}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{:}\DecValTok{50}\NormalTok{)}
+\NormalTok{rse =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{x =} \NormalTok{x, }\DataTypeTok{y =} \NormalTok{(}\DecValTok{1} \NormalTok{/}\StringTok{ }\KeywordTok{sqrt}\NormalTok{(x)) *}\StringTok{ }\DecValTok{100}\NormalTok{)}
+
+\CommentTok{# Figure 10}
+\KeywordTok{ggplot}\NormalTok{(rse, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{x, }\DataTypeTok{y =} \NormalTok{y)) +}
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{() +}
+\StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\DecValTok{6}\NormalTok{, }\DataTypeTok{y=}\DecValTok{0}\NormalTok{, }\DataTypeTok{xend=}\DecValTok{6}\NormalTok{, }\DataTypeTok{yend=}\DecValTok{41}\NormalTok{), }\DataTypeTok{color=}\StringTok{"darkred"}\NormalTok{, }\DataTypeTok{arrow =} \KeywordTok{arrow}\NormalTok{(}\DataTypeTok{length =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.25}\NormalTok{, }\StringTok{"cm"}\NormalTok{))) +}
+\StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\DecValTok{6}\NormalTok{, }\DataTypeTok{y=}\DecValTok{41}\NormalTok{, }\DataTypeTok{xend=}\DecValTok{0}\NormalTok{, }\DataTypeTok{yend=}\DecValTok{41}\NormalTok{), }\DataTypeTok{color=}\StringTok{"darkred"}\NormalTok{, }\DataTypeTok{arrow =} \KeywordTok{arrow}\NormalTok{(}\DataTypeTok{length =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.25}\NormalTok{, }\StringTok{"cm"}\NormalTok{))) +}
+\StringTok{  }\KeywordTok{geom_label}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\DecValTok{6}\NormalTok{, }\DataTypeTok{y=}\NormalTok{-}\DecValTok{5}\NormalTok{), }\DataTypeTok{label =} \StringTok{"6"}\NormalTok{) +}
+\StringTok{  }\KeywordTok{geom_label}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{-}\FloatTok{1.75}\NormalTok{, }\DataTypeTok{y=}\DecValTok{41}\NormalTok{), }\DataTypeTok{label =} \StringTok{"41"}\NormalTok{) +}
+\StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\DecValTok{16}\NormalTok{, }\DataTypeTok{y=}\DecValTok{25}\NormalTok{, }\DataTypeTok{xend=}\DecValTok{16}\NormalTok{, }\DataTypeTok{yend=}\DecValTok{0}\NormalTok{), }\DataTypeTok{color=}\StringTok{"darkblue"}\NormalTok{, }\DataTypeTok{arrow =} \KeywordTok{arrow}\NormalTok{(}\DataTypeTok{length =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.25}\NormalTok{, }\StringTok{"cm"}\NormalTok{))) +}
+\StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\DecValTok{0}\NormalTok{, }\DataTypeTok{y=}\DecValTok{25}\NormalTok{, }\DataTypeTok{xend=}\DecValTok{16}\NormalTok{, }\DataTypeTok{yend=}\DecValTok{25}\NormalTok{), }\DataTypeTok{color=}\StringTok{"darkblue"}\NormalTok{, }\DataTypeTok{arrow =} \KeywordTok{arrow}\NormalTok{(}\DataTypeTok{length =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.25}\NormalTok{, }\StringTok{"cm"}\NormalTok{))) +}
+\StringTok{  }\KeywordTok{geom_label}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\DecValTok{16}\NormalTok{, }\DataTypeTok{y=}\NormalTok{-}\DecValTok{5}\NormalTok{), }\DataTypeTok{label =} \StringTok{"16"}\NormalTok{) +}
+\StringTok{  }\KeywordTok{geom_label}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{-}\FloatTok{1.75}\NormalTok{, }\DataTypeTok{y=}\DecValTok{25}\NormalTok{), }\DataTypeTok{label =} \StringTok{"25"}\NormalTok{) +}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Number of responses"}\NormalTok{) +}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Relative Standard Error"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
 \begin{center}\includegraphics{likert_files/figure-latex/rse-1} \end{center}
 
@@ -636,18 +806,19 @@ Specifically in the medicine/healthcare context,
 that the use of parametric statistics on ordinal data (such calculating
 a mean or using a \emph{t}-test) is the first of ``The seven deadly sins
 of statistical analysis''. Don't ``sin'' and you don't have to worry
-about whether your results are illegitmate.
+about whether your results are illegitimate.
 
-There are a few ways around this: 1) use medians or other quantiles and
-test for differences in those statistics (these differences are best
-assessed via bootstrap or permutation testing), 2) test whether the
-distribution has shifted (Mann-Whitney-Wilcoxon or \(\chi^2\) tests), or
-3) use more advanced techniques such as multinomial or proportional-odds
-regression (see the \protect\hyperlink{Advanced}{\emph{Advanced}}
-section, below). These options are the more statistically-correct ways
-to do it (as opposed a \emph{t}-test).
+There are a few ways around this problem: 1) use medians or other
+quantiles and test for differences in those statistics (these
+differences are best assessed via bootstrap or permutation testing), 2)
+test whether the distribution has shifted (Mann-Whitney-Wilcoxon or
+\(\chi^2\) tests), or 3) use more advanced techniques such as
+multinomial or proportional-odds regression (see the
+\protect\hyperlink{Advanced}{\emph{Advanced}} section, below). These
+options are the more statistically-correct ways to do it (as opposed a
+\emph{t}-test).
 
-However, even if you are using the statistically correct tests, the
+However, even if you are using the correct tests, the
 \href{https://en.wikipedia.org/wiki/Multiple_comparisons_problem}{multiple-testing
 problem} remains if you are using traditional/frequentist inference.
 Make sure you \href{http://xkcd.com/882/}{consider the possibility of
@@ -817,74 +988,55 @@ ordinal distributions, there are other options that can tell you whether
 a measured difference between groups is statistical different.
 
 The old stand-by in this case is the \(\chi^2\) test, which is often
-best visualized with a mosaic plot.
+best visualized with a mosaic plot (Figure 11).
+
+\emph{Mosaic plot between Employee Type and responses to the `My team
+works well together' question.}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# Get rid of NAs}
-\NormalTok{both2 =}\StringTok{ }\KeywordTok{na.omit}\NormalTok{(both)}
-\KeywordTok{names}\NormalTok{(both2) =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"EmployeeType"}\NormalTok{, }\StringTok{"Teamwork"}\NormalTok{, }\StringTok{"Tools"}\NormalTok{)}
-\NormalTok{both2$Teamwork =}\StringTok{ }\KeywordTok{ordered}\NormalTok{(both2$Teamwork, }\DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\StringTok{"5"}\NormalTok{, }\StringTok{"4"}\NormalTok{, }\StringTok{"3"}\NormalTok{, }\StringTok{"2"}\NormalTok{, }\StringTok{"1"}\NormalTok{))}
-
-\CommentTok{# Make a table object for chisq stuff}
-\NormalTok{both2_tab =}\StringTok{ }\KeywordTok{xtabs}\NormalTok{(~}\StringTok{ }\NormalTok{both2$EmployeeType +}\StringTok{ }\NormalTok{both2$Teamwork)}
-
-\CommentTok{# Resampling version of chi-square}
-\CommentTok{# coin::chisq_test(both2_tab)}
-\end{Highlighting}
-\end{Shaded}
-
-\emph{Chi-square test and mosaic plot between Employee Type and
-responses to the ``My team works well together'' question.}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# Mosaic plot with Pearson residuals}
+\CommentTok{# Figure 11}
 \KeywordTok{mosaicplot}\NormalTok{(both2_tab, }\DataTypeTok{shade =} \NormalTok{T, }\DataTypeTok{main=}\StringTok{""}\NormalTok{, }\DataTypeTok{xlab=}\StringTok{"Employee Type"}\NormalTok{, }
-           \DataTypeTok{ylab=}\StringTok{"My team works well together"}\NormalTok{)}
+  \DataTypeTok{ylab=}\StringTok{"My team works well together"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{likert_files/figure-latex/mosaicplot-1} \end{center}
+\begin{center}\includegraphics{likert_files/figure-latex/chisq-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# Chi-square}
-\KeywordTok{chisq.test}\NormalTok{(both2_tab, }\DataTypeTok{simulate.p.value =} \NormalTok{T)}
+\CommentTok{# Chi-square test}
+\KeywordTok{chisq.test}\NormalTok{(both2_tab)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
 >  
->   Pearson's Chi-squared test with simulated p-value (based on 2000
->   replicates)
+>   Pearson's Chi-squared test
 >  
 >  data:  both2_tab
->  X-squared = 52.809, df = NA, p-value = 0.0004998
+>  X-squared = 52.809, df = 4, p-value = 9.344e-11
 \end{verbatim}
 
 \hypertarget{Advanced}{\section{Multinomial regression}\label{Advanced}}
 
 The multinomial regression model is a more powerful (and more modern)
-version of the \(\chi^2\) test.
+version of the \(\chi^2\) test. Here, we're using an AIC-based
+information-theoretic approach to determine whether the data as we see
+it is as likely a model as a model that suggests no difference between
+MD and RN responses. The probabilities can be plotted with a line chart
+for easy comparison.
 
 \emph{Multinomial regression between Employee Type and responses to the
-``My team works well together'' question, with information-theoretic
-table for multi-model inference.}
+`My team works well together' question, with information-theoretic table
+for multi-model inference.}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# Bring axis back to normal}
-\NormalTok{both2$Teamwork =}\StringTok{ }\KeywordTok{ordered}\NormalTok{(both2$Teamwork, }\DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\StringTok{"1"}\NormalTok{, }\StringTok{"2"}\NormalTok{, }\StringTok{"3"}\NormalTok{, }\StringTok{"4"}\NormalTok{, }\StringTok{"5"}\NormalTok{))}
-
 \CommentTok{# Multinomial regression}
-\NormalTok{multnom_both =}\StringTok{ }\KeywordTok{multinom}\NormalTok{(Teamwork ~}\StringTok{ }\NormalTok{EmployeeType, }\DataTypeTok{data =} \NormalTok{both2, }\DataTypeTok{trace =} \OtherTok{FALSE}\NormalTok{)}
-\NormalTok{multnom_both_1 =}\StringTok{ }\KeywordTok{multinom}\NormalTok{(Teamwork ~}\StringTok{ }\DecValTok{1}\NormalTok{, }\DataTypeTok{data =} \NormalTok{both2, }\DataTypeTok{trace =} \OtherTok{FALSE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+\NormalTok{multnom_both =}\StringTok{ }\KeywordTok{multinom}\NormalTok{(Teamwork ~}\StringTok{ }\NormalTok{EmployeeType, }\DataTypeTok{data =} \NormalTok{both3, }\DataTypeTok{trace =} \OtherTok{FALSE}\NormalTok{)}
+\NormalTok{multnom_both_1 =}\StringTok{ }\KeywordTok{multinom}\NormalTok{(Teamwork ~}\StringTok{ }\DecValTok{1}\NormalTok{, }\DataTypeTok{data =} \NormalTok{both3, }\DataTypeTok{trace =} \OtherTok{FALSE}\NormalTok{)}
 
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{# New data for prediction}
 \NormalTok{df_both =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{EmployeeType =} \KeywordTok{rep}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"MD"}\NormalTok{, }\StringTok{"RN"}\NormalTok{), }\DataTypeTok{each =} \DecValTok{5}\NormalTok{),  }
   \DataTypeTok{Teamwork =} \KeywordTok{rep}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{:}\DecValTok{5}\NormalTok{), }\DecValTok{2}\NormalTok{))}
@@ -902,7 +1054,7 @@ table for multi-model inference.}
   \DataTypeTok{id.vars =} \StringTok{"EmployeeType"}\NormalTok{, }\DataTypeTok{variable.name =} \StringTok{"Teamwork"}\NormalTok{, }
   \DataTypeTok{value.name =} \StringTok{"probability"}\NormalTok{)}
 
-\CommentTok{# Plot multinomial regression probs for Employee Type}
+\CommentTok{# Figure 12}
 \KeywordTok{ggplot}\NormalTok{(multnom_both_probs_df, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{Teamwork, }\DataTypeTok{y =} \NormalTok{probability, }
     \DataTypeTok{color =} \NormalTok{EmployeeType, }\DataTypeTok{group =} \NormalTok{EmployeeType)) +}
 \StringTok{  }\KeywordTok{geom_line}\NormalTok{() +}\StringTok{ }
@@ -911,7 +1063,11 @@ table for multi-model inference.}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{likert_files/figure-latex/multnom_plot-1} \end{center}
+\begin{center}\includegraphics{likert_files/figure-latex/multnom-1} \end{center}
+
+There appears to be an effect based on Employee Type; the AIC weight for
+that model is practically 1, making it clearly the best model of the
+model set.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -941,28 +1097,30 @@ If you can meet the assumptions, the proportional-odds regression is
 more powerful than the multinomial model, as it can take into account
 the ordered nature of the ordinal scale.
 
-\emph{Proportional odds logistic regression between Employee Type and
-responses to the ``My team works well together'' question, with
+Again, we use the information-theoretic approach to determine whether
+there is an effect based on Employee Type, again plotted with a line
+chart for easy comparison. And again the AICc results suggest an effect
+is present. The probabilities are slightly different from the
+multinomial model, but may be more accurate since we are now accounting
+for the ordered nature of the response values.
+
+\emph{Proportional odds regression between Employee Type and responses
+to the `My team works well together' question, with
 information-theoretic table for multi-model inference.}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# Data frame for proportional odds regression}
-\NormalTok{Teamwork_tab_long =}\StringTok{ }\NormalTok{both2[,}\DecValTok{1}\NormalTok{:}\DecValTok{2}\NormalTok{] %>%}
-\StringTok{  }\KeywordTok{group_by}\NormalTok{(EmployeeType, Teamwork) %>%}
-\StringTok{  }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{Count =} \KeywordTok{n}\NormalTok{())}
-
 \CommentTok{# Proportional odds regression with polr}
-\NormalTok{polr_both =}\StringTok{ }\NormalTok{MASS::}\KeywordTok{polr}\NormalTok{(Teamwork ~}\StringTok{ }\NormalTok{EmployeeType, }\DataTypeTok{data =} \NormalTok{Teamwork_tab_long, }
-                       \DataTypeTok{weight =} \NormalTok{Count)}
+\NormalTok{polr_both =}\StringTok{ }\KeywordTok{polr}\NormalTok{(Teamwork ~}\StringTok{ }\NormalTok{EmployeeType, }\DataTypeTok{data =} \NormalTok{Teamwork_tab_long, }
+  \DataTypeTok{weight =} \NormalTok{Count)}
 
 \CommentTok{# New data for prediction, same as multinom}
 \NormalTok{df_both =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{EmployeeType =} \KeywordTok{rep}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"MD"}\NormalTok{, }\StringTok{"RN"}\NormalTok{), }\DataTypeTok{each =} \DecValTok{5}\NormalTok{),  }
-                     \DataTypeTok{Teamwork =} \KeywordTok{rep}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{:}\DecValTok{5}\NormalTok{), }\DecValTok{2}\NormalTok{))}
+  \DataTypeTok{Teamwork =} \KeywordTok{rep}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{:}\DecValTok{5}\NormalTok{), }\DecValTok{2}\NormalTok{))}
 
 \CommentTok{# Get probabilities}
 \NormalTok{polr_both_probs =}\StringTok{ }\KeywordTok{cbind}\NormalTok{(df_both, }\KeywordTok{predict}\NormalTok{(polr_both, }\DataTypeTok{newdata =} \NormalTok{df_both, }
-                                         \DataTypeTok{type =} \StringTok{"probs"}\NormalTok{, }\DataTypeTok{se =} \OtherTok{TRUE}\NormalTok{))}
+  \DataTypeTok{type =} \StringTok{"probs"}\NormalTok{, }\DataTypeTok{se =} \OtherTok{TRUE}\NormalTok{))}
 
 \CommentTok{# Clean up, ugh}
 \NormalTok{polr_both_probs =}\StringTok{ }\NormalTok{polr_both_probs[,-}\DecValTok{2}\NormalTok{]}
@@ -972,7 +1130,7 @@ information-theoretic table for multi-model inference.}
 \NormalTok{polr_both_probs_df =}\StringTok{ }\NormalTok{reshape2::}\KeywordTok{melt}\NormalTok{(polr_both_probs, }\DataTypeTok{id.vars =} \StringTok{"EmployeeType"}\NormalTok{, }
   \DataTypeTok{variable.name =} \StringTok{"Teamwork"}\NormalTok{, }\DataTypeTok{value.name =} \StringTok{"probability"}\NormalTok{)}
 
-\CommentTok{# Plot prop odds regression probs for Employee Type}
+\CommentTok{# Figure 13}
 \KeywordTok{ggplot}\NormalTok{(polr_both_probs_df, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{Teamwork, }\DataTypeTok{y =} \NormalTok{probability, }
     \DataTypeTok{color =} \NormalTok{EmployeeType, }\DataTypeTok{group =} \NormalTok{EmployeeType)) +}
 \StringTok{  }\KeywordTok{geom_line}\NormalTok{() +}\StringTok{ }
@@ -985,32 +1143,17 @@ information-theoretic table for multi-model inference.}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{countsToCases =}\StringTok{ }\NormalTok{function(x, }\DataTypeTok{countcol =} \StringTok{"Count"}\NormalTok{) \{}
-    \CommentTok{# Get the row indices to pull from x}
-    \NormalTok{idx =}\StringTok{ }\KeywordTok{rep.int}\NormalTok{(}\KeywordTok{seq_len}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(x)), x[[countcol]])}
-    \CommentTok{# Drop count column}
-    \NormalTok{x[[countcol]] =}\StringTok{ }\OtherTok{NULL}
-    \CommentTok{# Get the rows from x}
-    \NormalTok{x[idx, ]}
-\NormalTok{\}}
-
-\CommentTok{# Make a data table}
-\NormalTok{Teamwork_tab_long$Teamwork_Group =}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(Teamwork_tab_long$Teamwork) }
-\NormalTok{Teamwork_tab_long$Teamwork =}\StringTok{ }\KeywordTok{ordered}\NormalTok{(Teamwork_tab_long$Teamwork) }
-\NormalTok{tab_df =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\KeywordTok{countsToCases}\NormalTok{(Teamwork_tab_long, }\DataTypeTok{countcol=}\StringTok{"Count"}\NormalTok{))}
-
-\CommentTok{# Need to better understand diffs between polr and clm}
+\CommentTok{# I need to better understand diffs between polr and clm}
+\CommentTok{# because polr objects don't play well with the AICcmodavg package}
 \CommentTok{# Coefs/thresholds are exactly the same, though}
-\NormalTok{fm1 =}\StringTok{ }\NormalTok{ordinal::}\KeywordTok{clm}\NormalTok{(Teamwork ~}\StringTok{ }\NormalTok{EmployeeType, }\DataTypeTok{data=}\NormalTok{tab_df)}
-\NormalTok{fm2 =}\StringTok{ }\NormalTok{ordinal::}\KeywordTok{clm}\NormalTok{(Teamwork ~}\StringTok{ }\NormalTok{EmployeeType, }\DataTypeTok{data=}\NormalTok{tab_df, }\DataTypeTok{threshold=}\StringTok{"equidistant"}\NormalTok{)}
-
+\NormalTok{fm1 =}\StringTok{ }\KeywordTok{clm}\NormalTok{(Teamwork ~}\StringTok{ }\NormalTok{EmployeeType, }\DataTypeTok{data=}\NormalTok{tab_df)}
 \CommentTok{# Null model}
-\NormalTok{fm3 =}\StringTok{ }\NormalTok{ordinal::}\KeywordTok{clm}\NormalTok{(Teamwork ~}\StringTok{ }\DecValTok{1}\NormalTok{, }\DataTypeTok{data=}\NormalTok{tab_df)}
+\NormalTok{fm2 =}\StringTok{ }\KeywordTok{clm}\NormalTok{(Teamwork ~}\StringTok{ }\DecValTok{1}\NormalTok{, }\DataTypeTok{data=}\NormalTok{tab_df)}
 
 \CommentTok{# AICc table}
 \NormalTok{mod_set =}\StringTok{ }\KeywordTok{list}\NormalTok{()}
     \NormalTok{mod_set[[}\DecValTok{1}\NormalTok{]] =}\StringTok{ }\NormalTok{fm1}
-    \NormalTok{mod_set[[}\DecValTok{2}\NormalTok{]] =}\StringTok{ }\NormalTok{fm3}
+    \NormalTok{mod_set[[}\DecValTok{2}\NormalTok{]] =}\StringTok{ }\NormalTok{fm2}
 
 \KeywordTok{kable}\NormalTok{(}\KeywordTok{aictab}\NormalTok{(mod_set, }\DataTypeTok{modnames =} \KeywordTok{c}\NormalTok{(}\StringTok{"Employee Type"}\NormalTok{, }\StringTok{"Null Model"}\NormalTok{)))}
 \end{Highlighting}
@@ -1026,10 +1169,14 @@ Null Model & 4 & 522.0647 & 36.16387 & 0 & 0 & -256.9118 & 1\\
 \hline
 \end{tabular}
 
+We can test the assumption of proportional odds with the \texttt{anova}
+function. There's no evidence of a difference, suggesting that the
+assumption is met.
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#The assumption of proportional-odds is ok }
-\KeywordTok{anova}\NormalTok{(fm1, fm2)}
+\NormalTok{fm3 =}\StringTok{ }\KeywordTok{clm}\NormalTok{(Teamwork ~}\StringTok{ }\NormalTok{EmployeeType, }\DataTypeTok{data=}\NormalTok{tab_df, }\DataTypeTok{threshold=}\StringTok{"equidistant"}\NormalTok{)}
+\KeywordTok{anova}\NormalTok{(fm1, fm3)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1037,17 +1184,27 @@ Null Model & 4 & 522.0647 & 36.16387 & 0 & 0 & -256.9118 & 1\\
 >  Likelihood ratio tests of cumulative link models:
 >   
 >      formula:                link: threshold: 
->  fm2 Teamwork ~ EmployeeType logit equidistant
+>  fm3 Teamwork ~ EmployeeType logit equidistant
 >  fm1 Teamwork ~ EmployeeType logit flexible   
 >  
 >      no.par    AIC  logLik LR.stat df Pr(>Chisq)
->  fm2      3 485.94 -239.97                      
+>  fm3      3 485.94 -239.97                      
 >  fm1      5 485.54 -237.77   4.407  2     0.1104
 \end{verbatim}
 
 If the concepts or ideas in this section are confusing, it's probably
 worth consulting a statistician for help evaluating your data with these
 tools.
+
+\chapter{A final word}\label{a-final-word}
+
+``But everybody does it!'' Yeah, and they're wrong.
+
+``But it's directionally correct!'' When a concept is based on discrete
+categories, ``in-between'' states are simply incoherent. The light's
+either on or off, practically speaking.
+
+``But I want to!'' No. Just. No.
 
 \chapter*{Appendix: Measurement Levels \& Summary
 Statistics}\label{appendix-measurement-levels-summary-statistics}

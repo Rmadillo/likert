@@ -9,3 +9,6 @@ Use of a median is somewhat resistant to this problem, though you still won't kn
 When you see an "undecided" or "N/A" response placed at the end of the scale or missing entirely, it is usually (but not always!) a sign that the survey creator understands this problem.  
 
 Sometimes, of course, *Neutral* can be a completely reasonable and unambiguous response to a question. Context matters; while it's easiest for survey creators and scanning software to use the same scale for large numbers of questions, it is important that the analyst understand the extent to which *Neutral* and similar types of responses are a valid part of the measurement scale for each question.  
+```{r no_neutral, fig.align='center', fig.width=3, echo=FALSE}
+knitr::include_graphics('images/no_neutral.png')
+```
