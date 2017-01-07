@@ -19,11 +19,13 @@ knitr::include_graphics('images/likert_cover.jpg')
 
 This is a short overview of why averages don't work well for evaluating Likert scale or other ordinal-scale data, and what to do instead, with examples using R. While the examples are focused on healthcare surveys, the lessons apply to any use of ordinal scale data.  
 
+Averaging removes variation, which in turn leads to false confidence. This is a universal issue throughout analytics, but is particularly problematic in the evaluation of ordinal-level data (e.g., Likert scales) for business or clinical decision-making. In this case, the problem is compounded by the fact that averages are conceptually incoherent on ordinal scales.   
+
+**Taking the average of a Likert-scale variable will *not* provide useful answers** to the questions managers can use to make actionable decisions. Analysts should strive to avoid their use in any reporting solution or analytic product that uses ordinal-scale data.  
+
 Note: all of the data in this document is fake, created specifically to illustrate particular points. 
 
 *Contact/Twitter:* @healthstatsdude   
-
-*PDF version:*   
 
 *Website:* https://bookdown.org/Rmadillo/likert/  
 
@@ -33,7 +35,7 @@ Note: all of the data in this document is fake, created specifically to illustra
 
 
 ```{r ccbysa, echo=FALSE}
-knitr::include_graphics('/Users/dbarr1/Documents/R/bookdown/likert/images/cc-by-sa.png')
+knitr::include_graphics('images/cc-by-sa.png')
 ```
 
 *This work is licensed under a [Creative Commons Attribution-ShareAlike 4.0 License](https://creativecommons.org/licenses/by-sa/4.0/).*  
