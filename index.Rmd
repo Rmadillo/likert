@@ -44,7 +44,7 @@ knitr::include_graphics('images/cc-by-sa.png')
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, comment = "> ", fig.height = 3, fig.align = "center")
 ```
 
-## R packgaes {-}
+## R packages {-}
 
 ```{r setup}
 #### Packages ####
